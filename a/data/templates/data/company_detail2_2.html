@@ -1,0 +1,89 @@
+{% load static %}
+{% block content %}
+<form>
+    <!-- Поле Название 1 -->
+    <div>
+        <label for="org_name1">Название 1:</label>
+        <input type="text" id="org_name1" name="org_name1" value="{{ company.org_name1 }}" readonly>
+    </div>
+
+    <!-- Поле Название 2 -->
+    <div>
+        <label for="org_name2">Название 2:</label>
+        <input type="text" id="org_name2" name="org_name2" value="{{ company.org_name2 }}" readonly>
+    </div>
+
+    <!-- Поле Название 3 -->
+    <div>
+        <label for="org_name3">Название 3:</label>
+        <input type="text" id="org_name3" name="org_name3" value="{{ company.org_name3 }}" readonly>
+    </div>
+
+    <!-- Поле Адрес -->
+    <div>
+        <label for="mainnew">Адрес:</label>
+        <textarea id="mainnew" name="mainnew" readonly>{{ company.mainnew }}</textarea>
+    </div>
+
+    <!-- Поле Комментарий -->
+    <div>
+        <label for="address_comment">Комментарий:</label>
+        <textarea id="address_comment" name="address_comment" readonly>{{ company.address_comment }}</textarea>
+    </div>
+
+    <!-- Поле Контакт -->
+    <div>
+        <label for="contact1">Контакт 1:</label>
+        <input type="text" id="contact1" name="contact1" value="{{ company.contact_groups_contacts1_text1 }}" readonly>
+    </div>
+    <div>
+        <label for="contact2">Контакт 2:</label>
+        <input type="text" id="contact2" name="contact2" value="{{ company.contact_groups_contacts1_text2 }}" readonly>
+    </div>
+    <div>
+        <label for="contact3">Контакт 3:</label>
+        <input type="text" id="contact3" name="contact3" value="{{ company.contact_groups_contacts1_text3 }}" readonly>
+    </div>
+    <div>
+        <label for="contact1">Контакт 4:</label>
+        <input type="text" id="contact4" name="contact4" value="{{ company.contact_groups_contacts1_text4 }}" readonly>
+    </div>
+    <div>
+        <label for="contact2">Контакт 5:</label>
+        <input type="text" id="contact5" name="contact5" value="{{ company.contact_groups_contacts1_text5 }}" readonly>
+    </div>
+    <div>
+        <label for="contact3">Контакт 6:</label>
+        <input type="text" id="contact6" name="contact6" value="{{ company.contact_groups_contacts1_text6 }}" readonly>
+    </div>
+
+    <!-- Поле Инфо -->
+    <div>
+        <label for="ads_article">Инфо:</label>
+        <textarea id="ads_article" name="ads_article" readonly>{{ company.ads_article }}</textarea>
+    </div>
+
+    <!-- Поле Доп инфо -->
+    <div>
+        <label for="article_warning">Доп инфо:</label>
+        <textarea id="article_warning" name="article_warning" readonly>{{ company.article_warning }}</textarea>
+    </div>
+
+    <!-- Поле Описание -->
+    <div>
+        <label for="description">Описание:</label>
+        <textarea id="description" name="description" readonly>{{ company.description }}</textarea>
+    </div>
+
+    <!-- Поле Рубрики -->
+    <div>
+        <label for="rubrics">Рубрики:</label>
+        <textarea id="rubrics" name="rubrics" readonly>
+            {% for tag in company.rubrics.all %}
+                {{ tag }},
+            {% endfor %}
+        </textarea>
+    </div>
+
+</form>
+{% endblock %}
