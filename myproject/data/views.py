@@ -9280,7 +9280,7 @@ def start(request):
                                 try:
                                     company_queryset = Company.objects.filter(org_name1=org_name1.lower(), rubrics__name_original=rubric_data2)
                                 except Exception as z:
-                                    with open('1-bag_z_log.txt', 'a', encoding='utf8') as f:
+                                    with open('1-bag_z_log.txt', 'myproject', encoding='utf8') as f:
                                         f.write(str(z))
                                         f.write('\n')
                                 if company_queryset.exists():
@@ -9313,7 +9313,7 @@ def start(request):
                                     company_instance.rubrics.set(rubrics_list)
                                 except Exception as d:
                                     if 'duplicate' not in d:
-                                        with open('1-bag_d_log.txt', 'a', encoding='utf8') as f:
+                                        with open('1-bag_d_log.txt', 'myproject', encoding='utf8') as f:
                                             f.write(str(d))
                                             f.write('\n')
                             with open(f'DONE_{filename}.txt', 'w', encoding='utf8') as f:
@@ -9322,7 +9322,7 @@ def start(request):
                         print('DONE')
                         print()
             except Exception as e:
-                with open('1_bags_e_log.txt', 'a', encoding='utf8') as f:
+                with open('1_bags_e_log.txt', 'myproject', encoding='utf8') as f:
                     f.write(str(e))
                     f.write('\n')
                     f.write(org_name1)
