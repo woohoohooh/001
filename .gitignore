@@ -30,3 +30,9 @@ dist/
 *.sqlite3
 .DS_Store
 Thumbs.db
+001.iml
+misc.xml
+modules.xml
+profiles_settings.xml
+vcs.xml
+workspace.xml
