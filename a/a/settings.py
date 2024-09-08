@@ -61,6 +61,10 @@ DATABASES = {
         'PASSWORD': r'Z#CH\ay)a}\f28',  # Raw string to handle backslashes properly
         'HOST': '213.171.12.236',
         'PORT': '5432',  # Default PostgreSQL port
+        'CONN_MAX_AGE': 600,  # Увеличивает время жизни соединения до 600 секунд (10 минут)
+        'OPTIONS': {
+            'connect_timeout': 10,  # Время ожидания подключения (в секундах)
+        },
     }
 }
 

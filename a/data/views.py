@@ -11,7 +11,7 @@ import random
 from django.db.models import Count
 from django.db.models import F
 from django.contrib import messages
-
+import logging
 
 aj = {
     "Call-центры": [
@@ -9118,6 +9118,11 @@ def start_add_zero_rubric(request):
             company.rubrics.add(other_rubric)
     return redirect('index')
 
+
+# Настройка логгера
+logging.basicConfig(filename='process.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+
 def start(request):
     tmp_orgs = []
     current_directory = os.path.dirname(os.path.abspath(__file__))
@@ -9311,6 +9316,8 @@ def start(request):
                                         with open('1-bag_d_log.txt', 'a', encoding='utf8') as f:
                                             f.write(str(d))
                                             f.write('\n')
+                            with open(f'DONE_{filename}.txt', 'w', encoding='utf8') as f:
+                                f.write(f'DONE\nProcessed on: {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
                         print()
                         print('DONE')
                         print()
@@ -9324,7 +9331,7 @@ def start(request):
                     f.write('\n')
                     f.write('\n')
 
-    return redirect('index')
+    return redirect('forstart')
 
 
 def forstart(request):
