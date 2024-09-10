@@ -27,7 +27,7 @@ class RubricsAdmin(admin.ModelAdmin):
         # Use the correct URL name for the Company model's change list view
         url = reverse("admin:%s_%s_changelist" % (obj._meta.app_label, Company._meta.model_name))
         url += f'?rubrics__id__exact={obj.id}'
-        return format_html('<a href="{}">{} companies</a>', url, count)
+        return format_html('<myproject href="{}">{} companies</myproject>', url, count)
 
     company_count_link.short_description = "Companies"
 
