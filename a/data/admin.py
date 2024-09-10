@@ -1,8 +1,10 @@
 from django.contrib import admin
+from django.urls import reverse
+from django.utils.html import format_html
 from .models import Company, Rubrics
 
 class RubricsAdmin(admin.ModelAdmin):
-    list_display = ['name_original', 'visible']
+    list_display = ['name_original', 'visible', 'company_count_link']
     list_editable = ['visible']
     search_fields = ['name_original']
     actions = ['make_all_visible', 'make_all_invisible']
@@ -17,6 +19,17 @@ class RubricsAdmin(admin.ModelAdmin):
 
     make_all_visible.short_description = "Сделать все рубрики видимыми"
     make_all_invisible.short_description = "Сделать все рубрики скрытыми"
+
+    def company_count_link(self, obj):
+        count = obj.company_set.count()
+        if count == 0:
+            return 'No companies'
+        # Use the correct URL name for the Company model's change list view
+        url = reverse("admin:%s_%s_changelist" % (obj._meta.app_label, Company._meta.model_name))
+        url += f'?rubrics__id__exact={obj.id}'
+        return format_html('<a href="{}">{} companies</a>', url, count)
+
+    company_count_link.short_description = "Companies"
 
 class CompanyAdmin(admin.ModelAdmin):
     list_display = [

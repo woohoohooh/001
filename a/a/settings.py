@@ -62,12 +62,12 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'default_db',
         'USER': 'gen_user',
-        'PASSWORD': r'Z#CH\ay)a}\f28',  # Raw string to handle backslashes properly
-        'HOST': '213.171.12.236',
+        'PASSWORD': r'R\4^=7n?q,Y\r<',  # Raw string to handle backslashes properly
+        'HOST': '176.124.213.20',
         'PORT': '5432',  # Default PostgreSQL port
         'CONN_MAX_AGE': 600,  # Увеличивает время жизни соединения до 600 секунд (10 минут)
         'OPTIONS': {
-            'connect_timeout': 10,  # Время ожидания подключения (в секундах)
+            'connect_timeout': 30,  # Время ожидания подключения (в секундах)
         },
     }
 }

@@ -9122,6 +9122,12 @@ def start_add_zero_rubric(request):
 # Настройка логгера
 logging.basicConfig(filename='process.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+import os
+import json
+import datetime
+from django.shortcuts import redirect
+from .models import Company, Rubrics
+
 
 def start(request):
     tmp_orgs = []
@@ -9135,176 +9141,83 @@ def start(request):
             try:
                 with open(file_path, 'r', encoding='utf-8-sig') as f:
                     ok = json.load(f)
+
                     if request.method == 'POST':
                         q = len(ok)
-                        count = 0
-                        for i in range(0, q):
+                        for count in range(q):
                             try:
-                                tmp_rubrics = ok[count]['rubrics']
+                                tmp_rubrics = ok[count].get('rubrics', [])
                                 rubrics_list = []
+
                                 for rubric_data in tmp_rubrics:
-                                    rubric_name = rubric_data['name'].replace(" /", ", ").replace("/", "").replace("  ", " ").strip()
+                                    rubric_name = rubric_data.get('name', '').replace(" /", ", ").replace("/",
+                                                                                                          "").replace(
+                                        "  ", " ").strip()
                                     if rubric_name in aj:
                                         rubric_name2 = aj[rubric_name][0].strip()
-                                        rubric_instance, created = Rubrics.objects.get_or_create(name_original=rubric_name2)
+                                        rubric_instance, created = Rubrics.objects.get_or_create(
+                                            name_original=rubric_name2)
                                         rubrics_list.append(rubric_instance)
-                            except (IndexError, KeyError):
+                            except Exception:
                                 rubrics_list = []
-                            try:
-                                city_name = ok[count]['adm_div'][3]['name']
-                            except (IndexError, KeyError):
-                                city_name = ''
-                            try:
-                                org_name = ok[count]['org']['name']
-                                try:
-                                    org_name = org_name.split(', ')
-                                    org_name1 = org_name[0].lower()
-                                    try:
-                                        org_name2 = org_name[1]
-                                    except (IndexError, KeyError):
-                                        org_name2 = ''
-                                except (IndexError, KeyError):
-                                    org_name2 = ''
-                            except (IndexError, KeyError):
-                                org_name1 = ''.lower()
-                            try:
-                                address_name = ok[count]['address_name']
-                            except (IndexError, KeyError):
-                                address_name = ''
-                            try:
-                                address_comment = ok[count]['address_comment']
-                            except (IndexError, KeyError):
-                                address_comment = ''
-                            try:
-                                one = ok[count]['contact_groups'][0]['contacts'][0]['value']
-                                if '?http' in one:
-                                    two = one.find('?http')
-                                    three = one[two + 1:]
-                                    contact_groups_contacts1_text1 = three
-                                elif '?text' in one:
-                                    two = one.find('?text')
-                                    three = one[:two]
-                                    contact_groups_contacts1_text1 = three
-                                else:
-                                    contact_groups_contacts1_text1 = one
-                            except (IndexError, KeyError):
-                                contact_groups_contacts1_text1 = ''
-                            try:
-                                one = ok[count]['contact_groups'][0]['contacts'][1]['value']
-                                if '?http' in one:
-                                    two = one.find('?http')
-                                    three = one[two + 1:]
-                                    contact_groups_contacts1_text2 = three
-                                elif '?text' in one:
-                                    two = one.find('?text')
-                                    three = one[:two]
-                                    contact_groups_contacts1_text2 = three
-                                else:
-                                    contact_groups_contacts1_text2 = one
-                            except (IndexError, KeyError):
-                                contact_groups_contacts1_text2 = ''
-                            try:
-                                one = ok[count]['contact_groups'][0]['contacts'][2]['value']
-                                if '?http' in one:
-                                    two = one.find('?http')
-                                    three = one[two + 1:]
-                                    contact_groups_contacts1_text3 = three
-                                elif '?text' in one:
-                                    two = one.find('?text')
-                                    three = one[:two]
-                                    contact_groups_contacts1_text3 = three
-                                else:
-                                    contact_groups_contacts1_text3 = one
-                            except (IndexError, KeyError):
-                                contact_groups_contacts1_text3 = ''
-                            try:
-                                one = ok[count]['contact_groups'][1]['contacts'][0]['value']
-                                if '?http' in one:
-                                    two = one.find('?http')
-                                    three = one[two + 1:]
-                                    contact_groups_contacts2_text1 = three
-                                elif '?text' in one:
-                                    two = one.find('?text')
-                                    three = one[:two]
-                                    contact_groups_contacts2_text1 = three
-                                else:
-                                    contact_groups_contacts2_text1 = one
-                            except (IndexError, KeyError):
-                                contact_groups_contacts2_text1 = ''
-                            try:
-                                one = ok[count]['contact_groups'][1]['contacts'][1]['value']
-                                if '?http' in one:
-                                    two = one.find('?http')
-                                    three = one[two + 1:]
-                                    contact_groups_contacts2_text2 = three
-                                elif '?text' in one:
-                                    two = one.find('?text')
-                                    three = one[:two]
-                                    contact_groups_contacts2_text2 = three
-                                else:
-                                    contact_groups_contacts2_text2 = one
-                            except (IndexError, KeyError):
-                                contact_groups_contacts2_text2 = ''
-                            try:
-                                one = ok[count]['contact_groups'][1]['contacts'][2]['value']
-                                if '?http' in one:
-                                    two = one.find('?http')
-                                    three = one[two + 1:]
-                                    contact_groups_contacts2_text3 = three
-                                elif '?text' in one:
-                                    two = one.find('?text')
-                                    three = one[:two]
-                                    contact_groups_contacts2_text3 = three
-                                else:
-                                    contact_groups_contacts2_text3 = one
-                            except (IndexError, KeyError):
-                                contact_groups_contacts2_text3 = ''
-                            try:
-                                ads_article = ok[count]['ads']['article'].replace('<br />', ' ')
-                            except (IndexError, KeyError):
-                                ads_article = ''
-                            try:
-                                article_warning = ok[count]['ads']['article_warning']
-                            except (IndexError, KeyError):
-                                article_warning = ''
-                            count += 1
+
+                            city_name = ok[count].get('adm_div', [{}] * 4)[3].get('name', '')
+                            org_name = ok[count].get('org', {}).get('name', '')
+                            org_name1, org_name2 = (org_name.split(', ') + [''])[:2]
+                            address_name = ok[count].get('address_name', '')
+                            address_comment = ok[count].get('address_comment', '')
+
+                            contact_groups = ok[count].get('contact_groups', [])
+                            contacts = []
+                            for group in contact_groups[:2]:  # Limiting to first two contact groups
+                                contacts += [contact.get('value', '') for contact in group.get('contacts', [])[:3]]
+                            # Extract and clean contact values
+                            contact_groups_contacts = [
+                                contact.split('?')[0] if '?http' in contact or '?text' in contact else contact
+                                for contact in contacts
+                            ]
+                            ads_article = ok[count].get('ads', {}).get('article', '').replace('<br />', ' ')
+                            article_warning = ok[count].get('ads', {}).get('article_warning', '')
+
                             if org_name1.lower() not in tmp_orgs:
                                 tmp_orgs.append(org_name1.lower())
+
                             mainnew = f'— {city_name}, {address_name}, {address_comment}<br>'.strip()
                             yes = False
+
                             for rubric_data2 in rubrics_list:
                                 try:
-                                    rubric_data2 = rubric_data2['name'].replace(" /", ", ").replace("/", "").replace("  ", " ").strip()
-                                except Exception as g:
-                                    ...
-                                try:
-                                    company_queryset = Company.objects.filter(org_name1=org_name1.lower(), rubrics__name_original=rubric_data2)
-                                except Exception as z:
-                                    with open('1-bag_z_log.txt', 'a', encoding='utf8') as f:
-                                        f.write(str(z))
-                                        f.write('\n')
-                                if company_queryset.exists():
-                                    yes = True
-                                    break
-                            if yes == True:
+                                    rubric_data2 = rubric_data2.name_original.strip()
+                                    company_queryset = Company.objects.filter(org_name1=org_name1.lower(),
+                                                                              rubrics__name_original=rubric_data2)
+                                    if company_queryset.exists():
+                                        yes = True
+                                        break
+                                except Exception as e:
+                                    with open('1-bag_z_log.txt', 'a', encoding='utf8') as log_file:
+                                        log_file.write(str(e) + '\n')
+
+                            if yes:
                                 company_instance = company_queryset.first()
                                 mainnewlist = company_instance.mainnew if company_instance else ''.strip()
                                 if mainnew not in mainnewlist:
                                     mainnew2 = f'{mainnewlist} {mainnew}'
                                     company_queryset.update(mainnew=mainnew2)
-
                             else:
                                 try:
                                     company_instance = Company.objects.create(
                                         org_name1=org_name1,
                                         org_name2=org_name2,
                                         mainnew=mainnew,
-                                        contact_groups_contacts1_text1=contact_groups_contacts1_text1,
-                                        contact_groups_contacts1_text2=contact_groups_contacts1_text2,
-                                        contact_groups_contacts1_text3=contact_groups_contacts1_text3,
-                                        contact_groups_contacts2_text1=contact_groups_contacts2_text1,
-                                        contact_groups_contacts2_text2=contact_groups_contacts2_text2,
-                                        contact_groups_contacts2_text3=contact_groups_contacts2_text3,
+                                        contact_groups_contacts1_text1=contact_groups_contacts[0],
+                                        contact_groups_contacts1_text2=contact_groups_contacts[1],
+                                        contact_groups_contacts1_text3=contact_groups_contacts[2],
+                                        contact_groups_contacts2_text1=contact_groups_contacts[3] if len(
+                                            contact_groups_contacts) > 3 else '',
+                                        contact_groups_contacts2_text2=contact_groups_contacts[4] if len(
+                                            contact_groups_contacts) > 4 else '',
+                                        contact_groups_contacts2_text3=contact_groups_contacts[5] if len(
+                                            contact_groups_contacts) > 5 else '',
                                         ads_article=ads_article,
                                         article_warning=article_warning,
                                         visible=False,
@@ -9312,24 +9225,18 @@ def start(request):
                                     )
                                     company_instance.rubrics.set(rubrics_list)
                                 except Exception as d:
-                                    if 'duplicate' not in d:
-                                        with open('1-bag_d_log.txt', 'a', encoding='utf8') as f:
-                                            f.write(str(d))
-                                            f.write('\n')
-                            with open(f'DONE_{filename}.txt', 'w', encoding='utf8') as f:
-                                f.write(f'DONE\nProcessed on: {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
-                        print()
+                                    if 'duplicate' not in str(d):
+                                        with open('1-bag_d_log.txt', 'a', encoding='utf8') as log_file:
+                                            log_file.write(str(d) + '\n')
+
+                            # Mark file as processed
+                            with open(f'DONE_{filename}.txt', 'w', encoding='utf8') as done_file:
+                                done_file.write(
+                                    f'DONE\nProcessed on: {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
                         print('DONE')
-                        print()
             except Exception as e:
-                with open('1_bags_e_log.txt', 'a', encoding='utf8') as f:
-                    f.write(str(e))
-                    f.write('\n')
-                    f.write(org_name1)
-                    f.write('\n')
-                    f.write(filename)
-                    f.write('\n')
-                    f.write('\n')
+                with open('1_bags_e_log.txt', 'a', encoding='utf8') as log_file:
+                    log_file.write(f'{str(e)}\n{org_name1}\n{filename}\n\n')
 
     return redirect('forstart')
 
