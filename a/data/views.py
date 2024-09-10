@@ -9194,7 +9194,7 @@ def start(request):
                                         yes = True
                                         break
                                 except Exception as e:
-                                    with open('1-bag_z_log.txt', 'myproject', encoding='utf8') as log_file:
+                                    with open('1-bag_z_log.txt', 'a', encoding='utf8') as log_file:
                                         log_file.write(str(e) + '\n')
 
                             if yes:
@@ -9226,7 +9226,7 @@ def start(request):
                                     company_instance.rubrics.set(rubrics_list)
                                 except Exception as d:
                                     if 'duplicate' not in str(d):
-                                        with open('1-bag_d_log.txt', 'myproject', encoding='utf8') as log_file:
+                                        with open('1-bag_d_log.txt', 'a', encoding='utf8') as log_file:
                                             log_file.write(str(d) + '\n')
 
                             # Mark file as processed
@@ -9235,7 +9235,7 @@ def start(request):
                                     f'DONE\nProcessed on: {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
                         print('DONE')
             except Exception as e:
-                with open('1_bags_e_log.txt', 'myproject', encoding='utf8') as log_file:
+                with open('1_bags_e_log.txt', 'a', encoding='utf8') as log_file:
                     log_file.write(f'{str(e)}\n{org_name1}\n{filename}\n\n')
 
     return redirect('forstart')
