@@ -1,16 +1,12 @@
 from django.http import HttpResponseForbidden, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Company, Rubrics, Comment
-import json
-import os
-from django.shortcuts import render
-import datetime
-from django.db.models import Q
-import json
-import random
-from django.db.models import Count
-from django.db.models import F
+from django.db.models import Q, F, Count
 from django.contrib import messages
+import os
+import json
+import datetime
+import random
 import logging
 
 aj = {
@@ -9121,12 +9117,6 @@ def start_add_zero_rubric(request):
 
 # Настройка логгера
 logging.basicConfig(filename='process.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-
-import os
-import json
-import datetime
-from django.shortcuts import redirect
-from .models import Company, Rubrics
 
 
 def start(request):
