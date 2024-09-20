@@ -18,10 +18,29 @@
 
 <br><br>
 <h5><b>Офисы</b></h5>
-<p>{{ company.mainnew|default:""|safe|linebreaksbr }}</p>
+<script id="mainnew-content" type="application/json">
+    {{ company.mainnew|default:""|safe|escapejs }}
+</script>
+<div id="mainnew-block"></div>
 
-    </p>
-    <p></p><br><br>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const contentText = document.getElementById("mainnew-content").textContent;
+
+        // Заменяем <br> на переносы строк
+        const formattedContent = contentText
+            .replace(/\\u003B/g, ',')        // Заменяем \u003B на запятую
+            .replace(/<br\s*\/?>/g, '\n')    // Заменяем <br> на \n
+            .replace(/\\u003C/g, '<')        // Заменяем \u003C на <
+            .replace(/\\u003E/g, '>')        // Заменяем \u003E на >
+            .replace(/\\u002D/g, '-')        // Заменяем \u002D на -
+            .trim();                         // Убираем лишние пробелы
+
+        // Устанавливаем отформатированный текст
+        document.getElementById("mainnew-block").innerHTML = formattedContent.replace(/\n/g, '<br>');
+    });
+</script><br><br>
+
 <h5><b>Услуги</b></h5>
     <div class="row">
         <div class="col-md-7">
@@ -34,13 +53,47 @@
             {% endif %}
         </div>
     </div>
-<h5><b>Контакты</b> </h5>
-{% if company.contact_groups_contacts1_text1 %}<p><a target="_blank" rel="nofollow" href="{{ company.contact_groups_contacts1_text1 }}">{{ company.contact_groups_contacts1_text1 }}</a></p>{% endif %}
-{% if company.contact_groups_contacts1_text2 %}<p><a target="_blank" rel="nofollow" href="{{ company.contact_groups_contacts1_text2 }}">{{ company.contact_groups_contacts1_text2 }}</a></p>{% endif %}
-{% if company.contact_groups_contacts1_text3 %}<p><a target="_blank" rel="nofollow" href="{{ company.contact_groups_contacts1_text3 }}">{{ company.contact_groups_contacts1_text3 }}</a></p>{% endif %}
-{% if company.contact_groups_contacts2_text1 %}<p><a target="_blank" rel="nofollow" href="{{ company.contact_groups_contacts2_text1 }}">{{ company.contact_groups_contacts2_text1 }}</a></p>{% endif %}
-{% if company.contact_groups_contacts2_text2 %}<p><a target="_blank" rel="nofollow" href="{{ company.contact_groups_contacts2_text2 }}">{{ company.contact_groups_contacts2_text2 }}</a></p>{% endif %}
-{% if company.contact_groups_contacts2_text3 %}<p><a target="_blank" rel="nofollow" href="{{ company.contact_groups_contacts2_text3 }}">{{ company.contact_groups_contacts2_text3 }}</a></p>{% endif %}
+
+<script id="company-contacts" type="application/json">
+    {
+        "contacts1_text1": "{{ company.contact_groups_contacts1_text1 }}",
+        "contacts1_text2": "{{ company.contact_groups_contacts1_text2 }}",
+        "contacts1_text3": "{{ company.contact_groups_contacts1_text3 }}",
+        "contacts2_text1": "{{ company.contact_groups_contacts2_text1 }}",
+        "contacts2_text2": "{{ company.contact_groups_contacts2_text2 }}",
+        "contacts2_text3": "{{ company.contact_groups_contacts2_text3 }}"
+    }
+</script>
+<div id="contacts"></div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const contactData = JSON.parse(document.getElementById("company-contacts").textContent);
+        let contactsHTML = '<h5><b>Контакты</b></h5>';
+
+        const isValidContact = (contact) => contact && !contact.includes('2gis');
+
+        if (isValidContact(contactData.contacts1_text1)) {
+            contactsHTML += `<a target="_blank" rel="nofollow" href="${contactData.contacts1_text1}">${contactData.contacts1_text1}</a><br>`;
+        }
+        if (isValidContact(contactData.contacts1_text2)) {
+            contactsHTML += `<a target="_blank" rel="nofollow" href="${contactData.contacts1_text2}">${contactData.contacts1_text2}</a><br>`;
+        }
+        if (isValidContact(contactData.contacts1_text3)) {
+            contactsHTML += `<a target="_blank" rel="nofollow" href="${contactData.contacts1_text3}">${contactData.contacts1_text3}</a><br>`;
+        }
+        if (isValidContact(contactData.contacts2_text1)) {
+            contactsHTML += `<a target="_blank" rel="nofollow" href="${contactData.contacts2_text1}">${contactData.contacts2_text1}</a><br>`;
+        }
+        if (isValidContact(contactData.contacts2_text2)) {
+            contactsHTML += `<a target="_blank" rel="nofollow" href="${contactData.contacts2_text2}">${contactData.contacts2_text2}</a><br>`;
+        }
+        if (isValidContact(contactData.contacts2_text3)) {
+            contactsHTML += `<a target="_blank" rel="nofollow" href="${contactData.contacts2_text3}">${contactData.contacts2_text3}</a>`;
+        }
+
+        document.getElementById("contacts").innerHTML = contactsHTML;
+    });
+</script>
 
 {% if company.ads_article %}<p>{{ company.ads_article }}</p>{% endif %}
 {% if company.article_warning %}<p>{{ company.article_warning }}</p>{% endif %}<br><br>
@@ -85,7 +138,6 @@
         <label class="form-check-label" for="negative">Не рекомендую</label>
     </div>
 
-    <!-- Невидимое поле для ботов -->
     <div style="display:none;">
         <label for="fake_field">Не заполнять</label>
         <input type="text" id="fake_field" name="name">
