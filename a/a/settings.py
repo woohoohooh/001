@@ -4,15 +4,14 @@ from django.conf import settings
 from django.conf.urls.static import static
 import psycopg2
 from psycopg2 import OperationalError
-from decouple import config
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = 'django-insecure-#6xidc@0k*^+2k3t@qyw%19+c=+st46pj5pjwb$d^q!^jqiw-e'
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['engil.ru']
+ALLOWED_HOSTS = ['*']
 
 CSRF_TRUSTED_ORIGINS = [
     'https://engil.ru',
