@@ -19,4 +19,4 @@ urlpatterns = [
 
 ]
 
-handler404 = 'views.custom_404_view'
+handler404 = 'data.views.custom_404_view'
