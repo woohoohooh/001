@@ -5,7 +5,7 @@ urlpatterns = [
     path('start/', start, name='start'),
     path('forstart/', forstart, name='forstart'),
     path('', index, name='index'),
-    path('data/<str:slug>/', rubric_detail, name='rubric_detail'),
+    path('rubrics/<str:slug>/', rubric_detail, name='rubric_detail'),
     path('test/', test, name='test'),
     path('test2/', test2, name='test2'),
     path('<str:slug>/', company_detail, name='company_detail'),
@@ -18,3 +18,5 @@ urlpatterns = [
 
 
 ]
+
+handler404 = 'views.custom_404_view'

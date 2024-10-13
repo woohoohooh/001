@@ -9230,6 +9230,8 @@ def start(request):
 
     return redirect('forstart')
 
+def custom_404_view(request, exception):
+    return render(request, 'data/404.html', {}, status=404)
 
 def forstart(request):
     return render(request, 'data/forstart.html')
