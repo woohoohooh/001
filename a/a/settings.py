@@ -92,7 +92,7 @@ USE_TZ = True
 
 # Настройки Timeweb S3
 AWS_ACCESS_KEY_ID = 'W9IPVPSXMBZ12O416SA7'  # Ваш Access Key
-AWS_SECRET_ACCESS_KEY = os.getenv('oKKCaatpAzsLlBUFvOnbAH021mCJfa5WTxB5v64d')  # Хранится в .env файле
+AWS_SECRET_ACCESS_KEY = 'oKKCaatpAzsLlBUFvOnbAH021mCJfa5WTxB5v64d'
 AWS_STORAGE_BUCKET_NAME = '23b150f1-bc6e7174-c901-4463-91a6-db6756f1714d'
 AWS_S3_REGION_NAME = 'ru-1'
 AWS_S3_ENDPOINT_URL = 'https://s3.timeweb.cloud'
