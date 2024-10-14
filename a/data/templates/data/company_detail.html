@@ -1,6 +1,11 @@
 {% extends 'data/base.html' %}
 {% load static %}
-{% block title %}{{ company.org_name1 }}, {{ company.org_name2 }} — Отзывы, Информация, Контакты{% endblock %}
+
+{% block title %}{{ company.org_name1 }} — Отзывы и Контакты{% endblock %}
+{% block description %}{{ company.org_name2 }} «{{ company.org_name1 }}».{% endblock %}
+{% block keywords %}{{ company.org_name1 }}, , отзывы, контакты, каталог компаний
+{% endblock %}
+
 {% block content %}
 
 <div class="container"><br><br>
