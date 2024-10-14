@@ -1,13 +1,9 @@
 import os
 from pathlib import Path
-from dotenv import load_dotenv
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-
-# Загружаем переменные окружения (если нужно)
-load_dotenv()
 
 # Базовые настройки
 BASE_DIR = Path(__file__).resolve().parent.parent
