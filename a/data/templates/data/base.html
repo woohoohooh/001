@@ -1,19 +1,18 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!-- Мета-теги -->
     <meta name="description" content="{% block description %}Описание по умолчанию{% endblock %}">
     <meta name="keywords" content="{% block keywords %}ключевые слова по умолчанию{% endblock %}">
 
+    <!-- Заголовок страницы -->
     <title>{% block title %}Основное название сайта{% endblock %}</title>
 
-    <meta property="og:title" content="{% block title %}Основное название сайта{% endblock %}">
-    <meta property="og:description" content="{% block description %}Описание по умолчанию{% endblock %}">
-    <meta property="og:image" content="{% static 'images/preview.jpg' %}">
-    <meta property="og:url" content="{% block url %}{{ request.build_absolute_uri }}{% endblock %}">
-    
+    <!-- Подключение стилей -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/main2.css' %}">
 </head>

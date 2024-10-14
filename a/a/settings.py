@@ -1,8 +1,12 @@
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+from django.contrib import admin
+from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
-# Загружаем переменные окружения
+# Загружаем переменные окружения (если нужно)
 load_dotenv()
 
 # Базовые настройки
@@ -30,6 +34,7 @@ INSTALLED_APPS = [
     'storages',  # Для работы с S3
 ]
 
+# Миддлвары
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -42,6 +47,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'a.urls'
 
+# Настройки шаблонов
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -66,7 +72,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'default_db',
         'USER': 'gen_user',
-        'PASSWORD': r'R\4^=7n?q,Y\r<',
+        'PASSWORD': r'R\4^=7n?q,Y\r<',  # временный пароль для тестов
         'HOST': '176.124.213.20',
         'PORT': '5432',
         'CONN_MAX_AGE': 600,  # 10 минут
@@ -76,56 +82,24 @@ DATABASES = {
     }
 }
 
-AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
-]
-
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
-USE_I18N = True
-USE_TZ = True
-
-# Настройки Timeweb S3
-AWS_ACCESS_KEY_ID = 'W9IPVPSXMBZ12O416SA7'  # Ваш Access Key
-AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')  # Хранится в .env файле
+# Настройки для S3
+AWS_ACCESS_KEY_ID = 'W9IPVPSXMBZ12O416SA7'
+AWS_SECRET_ACCESS_KEY = 'oKKCaatpAzsLlBUFvOnbAH021mCJfa5WTxB5v64d'
 AWS_STORAGE_BUCKET_NAME = '23b150f1-bc6e7174-c901-4463-91a6-db6756f1714d'
 AWS_S3_REGION_NAME = 'ru-1'
 AWS_S3_ENDPOINT_URL = 'https://s3.timeweb.cloud'
 AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.timeweb.cloud'
 
-# Настройки для хранения статики и медиафайлов на Timeweb S3
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-# URLs для статики и медиа
 STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
 MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
 
-# Локальная директория для статики (если нужно)
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
-# Директория для статики (если DEBUG=True)
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-# Указываем путь для медиафайлов
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Автоматическое создание ID для полей
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# URL-паттерны
-from django.urls import path, include
-from django.conf.urls.static import static
-
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('data.urls')),
-]
-
-# Обработка статики и медиа в режиме отладки
-if DEBUG:
-    urlpatterns += static(STATIC_URL, document_root=STATIC_ROOT)
-    urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)

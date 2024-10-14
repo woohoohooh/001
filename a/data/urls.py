@@ -15,8 +15,7 @@ urlpatterns = [
     path('post/<int:post_id>/comment/', add_comment, name='add_comment'),
     path('company/<int:pk>/toggle_visibility/', toggle_visibility, name='toggle_visibility'),
     path('company/delete/<int:pk>/', delete_company, name='delete_company'),
-
-
 ]
 
+# Настройка кастомной страницы 404
 handler404 = 'data.views.custom_404_view'

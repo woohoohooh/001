@@ -8895,14 +8895,19 @@ aj = {
     ]
 }
 
+
 def rubric_detail(request, slug):
-    try:
-        rubric_obj = Rubrics.objects.get(slug=slug)
-        companies_with_rubric = Company.objects.filter(rubrics=rubric_obj, visible=True)
-        return render(request, 'data/rubric_result.html',
-                      context={'rubric': rubric_obj, 'companies': companies_with_rubric})
-    except Rubrics.DoesNotExist:
-        return HttpResponse('Rubric not found.')
+    # Получаем рубрику или выбрасываем 404 ошибку, если не найдено
+    rubric_obj = get_object_or_404(Rubrics, slug=slug)
+
+    # Получаем компании, связанные с рубрикой и с видимостью True
+    companies_with_rubric = Company.objects.filter(rubrics=rubric_obj, visible=True)
+
+    # Отправляем данные в шаблон
+    return render(request, 'data/rubric_result.html', context={
+        'rubric': rubric_obj,
+        'companies': companies_with_rubric,
+    })
 
 
 def index(request):
@@ -8981,10 +8986,16 @@ def test2(request):
 
     return render(request, 'data/test.html', {'find': find, 'count': count})
 
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponseForbidden
+from django.db.models import F
+from .models import Company, Comment, Rubrics
+
 def company_detail(request, slug):
     company = get_object_or_404(Company, slug=slug)
     rubrics = Rubrics.objects.all()
     comments = company.comments.all().order_by('-created_at')
+
     if request.method == 'POST':
         name = request.POST.get('name')
         content = request.POST.get('content')
@@ -8996,10 +9007,13 @@ def company_detail(request, slug):
             is_positive = (feedback_type == 'positive')
             comment = Comment(company=company, name=name, content=content, is_positive=is_positive)
             comment.save()
-            Comment.objects.filter(pk=comment.pk).update(created_at=F('created_at'))
             comments = company.comments.all().order_by('-created_at')
+    print(company.mainnew)  # Проверьте, что объект компании получен
+    print(comments)  # Проверьте, что комментарии существуют
+
     return render(request, 'data/company_detail.html',
                   context={'company': company, 'rubrics': rubrics, 'comments': comments})
+
 
 def toggle_visibility(request, pk):
     company = get_object_or_404(Company, pk=pk)

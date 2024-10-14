@@ -1,21 +1,23 @@
 {% extends 'data/base.html' %}
 
-{% block title %}Отзывы о компаниях — {{ rubric.name }}{% endblock %}
+{% block title %}Отзывы о компаниях — {{ rubric.name_original }}{% endblock %}
 
 {% block description %}
-    Узнайте о компаниях в категории {{ rubric.name }}: отзывы, контактная информация, услуги и многое другое.
+    Узнайте о компаниях в категории {{ rubric.name_original }}: отзывы, контактная информация, услуги и многое другое.
 {% endblock %}
 
 {% block keywords %}
-    отзывы о компаниях {{ rubric.name }}, контакты компаний {{ rubric.name }}, услуги {{ rubric.name }}
+    отзывы о компаниях {{ rubric.name_original }}, контакты компаний {{ rubric.name_original }}, услуги {{ rubric.name_original }}
 {% endblock %}
 
 {% block content %}
     <div class="container">
-        <h3>Компании в категории "{{ rubric.name }}"</h3>
+        <h3>Компании в категории "{{ rubric.name_original }}"</h3>
         <ul>
-            {% for company in rubric.companies.all %}
+            {% for company in companies %}
                 <li><a href="{% url 'company_detail' slug=company.slug %}">{{ company.org_name1 }}</a></li>
+            {% empty %}
+                <li>Нет компаний в этой категории.</li>
             {% endfor %}
         </ul>
     </div>
