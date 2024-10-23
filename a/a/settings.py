@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'data.apps.DataConfig',  # Ваше приложение
     'storages',  # Для работы с S3
+    'django.contrib.sitemaps'
 ]
 
 MIDDLEWARE = [

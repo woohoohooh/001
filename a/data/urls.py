@@ -1,5 +1,12 @@
 from django.urls import path
+from django.contrib.sitemaps.views import sitemap
+from .sitemaps import RubricsSitemap, CompanySitemap
 from .views import index, forstart, delete_company, company_detail, rubric_detail, add_comment, company_detail2_2, start, test, test2, start_add_prefixes, start_add_zero_rubric, toggle_visibility
+
+sitemaps = {
+    'rubrics': RubricsSitemap,
+    'companies': CompanySitemap,
+}
 
 urlpatterns = [
     path('start/', start, name='start'),
@@ -15,6 +22,7 @@ urlpatterns = [
     path('post/<int:post_id>/comment/', add_comment, name='add_comment'),
     path('company/<int:pk>/toggle_visibility/', toggle_visibility, name='toggle_visibility'),
     path('company/delete/<int:pk>/', delete_company, name='delete_company'),
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='sitemap'),
 ]
 
 # Настройка кастомной страницы 404
