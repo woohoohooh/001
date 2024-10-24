@@ -89,8 +89,8 @@ AWS_S3_REGION_NAME = 'ru-1'
 AWS_S3_ENDPOINT_URL = 'https://s3.timeweb.cloud'
 AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.timeweb.cloud'
 
-STATICFILES_STORAGE = 'your_project.custom_storages.StaticStorage'
-DEFAULT_FILE_STORAGE = 'your_project.custom_storages.MediaStorage'
+STATICFILES_STORAGE = 'data.custom_storages.StaticStorage'
+DEFAULT_FILE_STORAGE = 'data.custom_storages.MediaStorage'
 
 STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
 MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
