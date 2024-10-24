@@ -1,12 +1,5 @@
 import os
 from pathlib import Path
-from django.contrib import admin
-from pathlib import Path
-import os
-from django.conf import settings
-from django.conf.urls.static import static
-import psycopg2
-from psycopg2 import OperationalError
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -20,7 +13,6 @@ CSRF_TRUSTED_ORIGINS = [
     'https://engil.ru',
 ]
 
-# Приложения Django
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -28,9 +20,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'data.apps.DataConfig',  # Ваше приложение
-    'storages',  # Для работы с S3
-    'django.contrib.sitemaps'
+    'data.apps.DataConfig',
+    'storages',
+    'django.contrib.sitemaps',
 ]
 
 MIDDLEWARE = [
@@ -63,7 +55,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'a.wsgi.application'
 
-# Настройки базы данных (PostgreSQL)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -72,9 +63,9 @@ DATABASES = {
         'PASSWORD': r'R\4^=7n?q,Y\r<',
         'HOST': '176.124.213.20',
         'PORT': '5432',
-        'CONN_MAX_AGE': 600,  # 10 минут
+        'CONN_MAX_AGE': 600,
         'OPTIONS': {
-            'connect_timeout': 30,  # Время ожидания подключения
+            'connect_timeout': 30,
         },
     }
 }
@@ -91,32 +82,29 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# Настройки Timeweb S3
-AWS_ACCESS_KEY_ID = 'W9IPVPSXMBZ12O416SA7'  # Ваш Access Key
+AWS_ACCESS_KEY_ID = 'W9IPVPSXMBZ12O416SA7'
 AWS_SECRET_ACCESS_KEY = 'oKKCaatpAzsLlBUFvOnbAH021mCJfa5WTxB5v64d'
 AWS_STORAGE_BUCKET_NAME = '23b150f1-bc6e7174-c901-4463-91a6-db6756f1714d'
 AWS_S3_REGION_NAME = 'ru-1'
 AWS_S3_ENDPOINT_URL = 'https://s3.timeweb.cloud'
 AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.timeweb.cloud'
 
-# Настройки для хранения статики и медиафайлов на Timeweb S3
-STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'your_project.custom_storages.StaticStorage'
+DEFAULT_FILE_STORAGE = 'your_project.custom_storages.MediaStorage'
 
-# URLs для статики и медиа
 STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
 MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
 
-# Локальная директория для статики (если нужно)
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'data', 'static'),  # Путь к статическим файлам приложения
+    os.path.join(BASE_DIR, 'data', 'static'),
 ]
 
-# Директория для статики (если DEBUG=True)
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# Указываем путь для медиафайлов
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Автоматическое создание ID для полей
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+SITE_DOMAIN = '001'
+STATICFILES_LOCATION = f'static/{SITE_DOMAIN}'
+MEDIAFILES_LOCATION = f'media/{SITE_DOMAIN}'
