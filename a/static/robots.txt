@@ -1,4 +1,0 @@
-User-agent: *
-Disallow:
-
-Sitemap: https://engil.ru/sitemap.xml
