@@ -108,7 +108,9 @@ STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
 MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
 
 # Локальная директория для статики (если нужно)
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'data', 'static'),  # Путь к статическим файлам приложения
+]
 
 # Директория для статики (если DEBUG=True)
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
