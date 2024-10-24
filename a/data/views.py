@@ -8,7 +8,6 @@ import json
 import datetime
 import random
 import logging
-from django.views.decorators.http import require_GET
 
 aj = {
     "Call-центры": [
@@ -9250,13 +9249,3 @@ def custom_404_view(request, exception):
 
 def forstart(request):
     return render(request, 'data/forstart.html')
-
-@require_GET
-def robots_txt(request):
-    content = """
-    User-agent: *
-    Disallow:
-    
-    Sitemap: https://engil.ru/sitemap.xml
-    """
-    return HttpResponse(content, content_type="text/plain")
