@@ -77,22 +77,22 @@
         const isValidContact = (contact) => contact && !contact.includes('2gis');
 
         if (isValidContact(contactData.contacts1_text1)) {
-            contactsHTML += `<a target="_blank" rel="nofollow" href="${contactData.contacts1_text1}">${contactData.contacts1_text1}</a><br>`;
+            contactsHTML += `<a target="_blank" rel="nofollow">${contactData.contacts1_text1}</a><br>`;
         }
         if (isValidContact(contactData.contacts1_text2)) {
-            contactsHTML += `<a target="_blank" rel="nofollow" href="${contactData.contacts1_text2}">${contactData.contacts1_text2}</a><br>`;
+            contactsHTML += `<a target="_blank" rel="nofollow">${contactData.contacts1_text2}</a><br>`;
         }
         if (isValidContact(contactData.contacts1_text3)) {
-            contactsHTML += `<a target="_blank" rel="nofollow" href="${contactData.contacts1_text3}">${contactData.contacts1_text3}</a><br>`;
+            contactsHTML += `<a target="_blank" rel="nofollow">${contactData.contacts1_text3}</a><br>`;
         }
         if (isValidContact(contactData.contacts2_text1)) {
-            contactsHTML += `<a target="_blank" rel="nofollow" href="${contactData.contacts2_text1}">${contactData.contacts2_text1}</a><br>`;
+            contactsHTML += `<a target="_blank" rel="nofollow">${contactData.contacts2_text1}</a><br>`;
         }
         if (isValidContact(contactData.contacts2_text2)) {
-            contactsHTML += `<a target="_blank" rel="nofollow" href="${contactData.contacts2_text2}">${contactData.contacts2_text2}</a><br>`;
+            contactsHTML += `<a target="_blank" rel="nofollow"}">${contactData.contacts2_text2}</a><br>`;
         }
         if (isValidContact(contactData.contacts2_text3)) {
-            contactsHTML += `<a target="_blank" rel="nofollow" href="${contactData.contacts2_text3}">${contactData.contacts2_text3}</a>`;
+            contactsHTML += `<a target="_blank" rel="nofollow"}">${contactData.contacts2_text3}</a>`;
         }
 
         document.getElementById("contacts").innerHTML = contactsHTML;
