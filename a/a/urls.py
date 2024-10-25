@@ -7,8 +7,9 @@ from django.views.generic import RedirectView
 urlpatterns = [
     path('q/', admin.site.urls),
     path('', include('data.urls')),
-    re_path(r'^favicon\.ico$', RedirectView.as_view(url=f'{settings.STATIC_URL}favicon.ico', permanent=True)),
-    re_path(r'^robots\.txt$', RedirectView.as_view(url=f'{settings.STATIC_URL}robots.txt', permanent=True)),
+    # Прямые ссылки для favicon.ico и robots.txt
+    re_path(r'^favicon\.ico$', RedirectView.as_view(url='https://s3.timeweb.cloud/23b150f1-bc6e7174-c901-4463-91a6-db6756f1714d/favicon.ico', permanent=True)),
+    re_path(r'^robots\.txt$', RedirectView.as_view(url='https://s3.timeweb.cloud/23b150f1-bc6e7174-c901-4463-91a6-db6756f1714d/robots.txt', permanent=True)),
 ]
 
 if settings.DEBUG:
