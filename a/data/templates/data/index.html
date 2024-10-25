@@ -1,32 +1,21 @@
-{% load static %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{% block title %}Отзывы о компаниях {{ current_year }}{% endblock %}</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/main2.css' %}">
-</head>
-<body>
-    {% include 'data/menu.html' %}
+{% extends 'base.html' %}
 
-    <div class="content">
-        {% block content %}
-        <div class="container">
-            <br><br>
-            <div class="row">
-                <div class="col-md-9">
-                    <div class="main-content">
-                        <h1 class="p-4 mb-3 bg-body-tertiary rounded">Каталог компаний</h1><br>
-                        <p>Добро пожаловать на <b>Engil</b>.ru – вашем надежном партнере в поиске объективной информации о различных организациях. Мы предоставляем уникальную платформу, где пользователи делятся своим опытом и оценивают компании...</p><br>
-                        {% for rubric in rubrics %}
-                            <li>★ <a href="{% url 'rubric_detail' slug=rubric.slug %}">{{ rubric }}</a></li><br>
-                        {% endfor %}
-                        <p>Каталог компаний создан для тех, кто ценит надежные и проверенные источники информации при выборе бизнес-партнеров...</p>
-                    </div>
-                </div>
+{% block title %}Отзывы о компаниях {{ current_year }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <br><br>
+    <div class="row">
+        <div class="col-md-9">
+            <div class="main-content">
+                <h1 class="p-4 mb-3 bg-body-tertiary rounded">Каталог компаний</h1><br>
+                <p>Добро пожаловать на <b>Engil</b>.ru – вашем надежном партнере в поиске объективной информации о различных организациях. Мы предоставляем уникальную платформу, где пользователи делятся своим опытом и оценивают компании...</p><br>
+                {% for rubric in rubrics %}
+                    <li>★ <a href="{% url 'rubric_detail' slug=rubric.slug %}">{{ rubric }}</a></li><br>
+                {% endfor %}
+                <p>Каталог компаний создан для тех, кто ценит надежные и проверенные источники информации при выборе бизнес-партнеров...</p>
             </div>
         </div>
-        {% endblock %}
     </div>
-</body>
-</html>
+</div>
+{% endblock %}
