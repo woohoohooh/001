@@ -1,13 +1,10 @@
-{% load static %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{% block title %}Отзывы о компаниях {{ current_year }}{% endblock %}</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/main2.css' %}">
-</head>
-<body>
-    {% include 'data/menu.html' %}
+{% extends 'data/base.html' %}
+
+{% block description %}Смотрите отзывы о компаниях: отзывы, контактная информация, услуги и многое другое.{% endblock %}
+
+{% block keywords %}engil.ru, отзывы о компаниях, контакты компаний{% endblock %}
+
+{% block title %}Отзывы о компаниях {{ current_year }}{% endblock %}
 
     <div class="content">
         {% block content %}
@@ -27,6 +24,3 @@
             </div>
         </div>
         {% endblock %}
-    </div>
-</body>
-</html>
