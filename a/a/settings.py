@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from django.conf import settings
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -13,6 +14,7 @@ CSRF_TRUSTED_ORIGINS = [
     'https://engil.ru',
 ]
 
+# Приложения Django
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -20,8 +22,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'data.apps.DataConfig',
-    'storages',
+    'data.apps.DataConfig',  # Ваше приложение
+    'storages',  # Для работы с S3
     'django.contrib.sitemaps',
 ]
 
@@ -55,6 +57,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'a.wsgi.application'
 
+# Настройки базы данных (PostgreSQL)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -63,9 +66,9 @@ DATABASES = {
         'PASSWORD': r'R\4^=7n?q,Y\r<',
         'HOST': '176.124.213.20',
         'PORT': '5432',
-        'CONN_MAX_AGE': 600,
+        'CONN_MAX_AGE': 600,  # 10 минут
         'OPTIONS': {
-            'connect_timeout': 30,
+            'connect_timeout': 30,  # Время ожидания подключения
         },
     }
 }
@@ -82,29 +85,39 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-AWS_ACCESS_KEY_ID = 'W9IPVPSXMBZ12O416SA7'
+# Настройки Timeweb S3
+AWS_ACCESS_KEY_ID = 'W9IPVPSXMBZ12O416SA7'  # Ваш Access Key
 AWS_SECRET_ACCESS_KEY = 'oKKCaatpAzsLlBUFvOnbAH021mCJfa5WTxB5v64d'
 AWS_STORAGE_BUCKET_NAME = '23b150f1-bc6e7174-c901-4463-91a6-db6756f1714d'
 AWS_S3_REGION_NAME = 'ru-1'
 AWS_S3_ENDPOINT_URL = 'https://s3.timeweb.cloud'
 AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.timeweb.cloud'
 
+# Переменная для хранения идентификатора сайта (может быть доменом, ID и т.д.)
+SITE_ID = '001'  # Можете задать динамически, например, через конфигурацию сайта
+
+# Кастомные классы для статики и медиафайлов с папкой ID сайта перед /static/ и /media/
 STATICFILES_STORAGE = 'data.custom_storages.StaticStorage'
 DEFAULT_FILE_STORAGE = 'data.custom_storages.MediaStorage'
 
-STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
-MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
+# URLs для статики и медиа (с учетом переменной SITE_ID)
+STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{SITE_ID}/static/'
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{SITE_ID}/media/'
 
+# Локальная директория для статики (если нужно)
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'data', 'static'),
+    os.path.join(BASE_DIR, 'data', 'static'),  # Путь к статическим файлам приложения
 ]
 
+# Директория для статики (если DEBUG=True)
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+# Указываем путь для медиафайлов
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# Автоматическое создание ID для полей
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-SITE_DOMAIN = '001'
-STATICFILES_LOCATION = f'static/{SITE_DOMAIN}'
-MEDIAFILES_LOCATION = f'media/{SITE_DOMAIN}'
+# Настройки для формирования пути
+STATICFILES_LOCATION = f'{SITE_ID}/static'
+MEDIAFILES_LOCATION = f'{SITE_ID}/media'
