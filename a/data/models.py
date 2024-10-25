@@ -1,14 +1,11 @@
-import re
 from django.db import models
 from django.utils.text import slugify
-
 
 def custom_slugify(value):
     value = re.sub(r'[^\w\s\-]', '', value)
     value = re.sub(r'\s+', '-', value)
     value = value.lower()
     return value
-
 
 class Rubrics(models.Model):
     name_original = models.CharField('Рубрика', max_length=1000, null=True, blank=True, default='')
@@ -22,7 +19,6 @@ class Rubrics(models.Model):
 
     def __str__(self):
         return str(self.name_original)
-
 
 class Company(models.Model):
     rubrics = models.ManyToManyField(Rubrics, blank=True)
@@ -43,6 +39,7 @@ class Company(models.Model):
     visible = models.BooleanField('Отображать', default=True, null=True)
     pro = models.BooleanField('PRO', null=True, default=False)
     slug = models.SlugField(unique=True, allow_unicode=True, max_length=1000)
+    logo = models.ImageField(upload_to='logos/', blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
