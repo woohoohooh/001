@@ -63,6 +63,12 @@ class CompanyAdmin(admin.ModelAdmin):
         queryset = self.get_queryset(request)
         model = queryset.model
 
+        # Попытка найти объект по ID
+        try:
+            return queryset.get(pk=object_id)
+        except model.DoesNotExist:
+            pass
+
         # Поиск по slug, если ID не найден
         try:
             return queryset.get(slug=object_id)
@@ -75,12 +81,10 @@ class CompanyAdmin(admin.ModelAdmin):
     def get_urls(self):
         from django.urls import path
 
-        # Получаем базовые URL для админки
         urls = super().get_urls()
-
-        # Создаем кастомные URL маршруты с использованием slug
         custom_urls = [
-            path('<slug:object_id>/change/', self.admin_site.admin_view(self.change_view), name=f'{self.model._meta.app_label}_{self.model._meta.model_name}_change'),
+            path('<slug:object_id>/change/', self.admin_site.admin_view(self.change_view),
+                 name=f'{self.model._meta.app_label}_{self.model._meta.model_name}_change_slug'),
         ]
 
         return custom_urls + urls
