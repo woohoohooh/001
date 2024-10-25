@@ -5,14 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Мета-теги -->
     <meta name="description" content="{% block description %}Описание по умолчанию{% endblock %}">
     <meta name="keywords" content="{% block keywords %}ключевые слова по умолчанию{% endblock %}">
 
-    <!-- Заголовок страницы -->
     <title>{% block title %}Основное название сайта{% endblock %}</title>
 
-    <!-- Подключение стилей -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/main2.css' %}">
     <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
