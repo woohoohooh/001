@@ -8982,6 +8982,12 @@ def test2(request):
 
     return render(request, 'data/test.html', {'find': find, 'count': count})
 
+
+from django.http import HttpResponseForbidden
+from django.shortcuts import get_object_or_404, render
+from .models import Company, Rubrics, Comment
+
+
 def company_detail(request, slug):
     company = get_object_or_404(Company, slug=slug)
     rubrics = Rubrics.objects.all()
@@ -8992,18 +8998,26 @@ def company_detail(request, slug):
         content = request.POST.get('content')
         feedback_type = request.POST.get('feedback_type')
         fake_field = request.POST.get('fake_field', '')
+
         if fake_field:
             return HttpResponseForbidden('Вы не можете отправлять комментарии.')
+
         if name and content and feedback_type:
             is_positive = (feedback_type == 'positive')
             comment = Comment(company=company, name=name, content=content, is_positive=is_positive)
             comment.save()
-            comments = company.comments.all().order_by('-created_at')
-    print(company.mainnew)  # Проверьте, что объект компании получен
-    print(comments)  # Проверьте, что комментарии существуют
+            comments = company.comments.all().order_by('-created_at')  # обновить комментарии
 
-    return render(request, 'data/company_detail.html',
-                  context={'company': company, 'rubrics': rubrics, 'comments': comments})
+    # Передаем данные компании и комментарии в шаблон
+    return render(
+        request,
+        'data/company_detail.html',
+        context={
+            'company': company,
+            'rubrics': rubrics,
+            'comments': comments
+        }
+    )
 
 
 def toggle_visibility(request, pk):
