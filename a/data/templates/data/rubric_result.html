@@ -8,7 +8,7 @@
 
 {% block content %}
     <div class="container">
-        <h3>Компании в категории «{{ rubric.name_original }}»</h3>
+        <h3>Компании категории «{{ rubric.name_original }}»</h3>
         <ul>
             {% for company in companies %}
                 <li><a href="{% url 'company_detail' slug=company.slug %}">{{ company.org_name1 }}</a></li>
