@@ -1,5 +1,7 @@
 {% extends 'data/base.html' %}
 {% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/detail.css' %}">
 {% block description %}{{ company.org_name2 }} «{{ company.org_name1 }}».{% endblock %}
 {% block keywords %}{{ company.org_name1 }}, компания {{ company.org_name1 }}{% endblock %}
 {% block title %}{{ company.org_name1 }} — страница компании{% endblock %}

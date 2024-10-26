@@ -1,9 +1,8 @@
 {% extends 'data/base.html' %}
 
+<link rel="stylesheet" type="text/css" href="{% static 'css/rubrics.css' %}">
 {% block description %}Каталог компаний категории «{{ rubric.name_original }}».{% endblock %}
-
 {% block keywords %}компании {{ rubric.name_original }}{% endblock %}
-
 {% block title %}Компании категории {{ rubric.name_original }}{% endblock %}
 
 {% block content %}
