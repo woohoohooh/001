@@ -1,18 +1,14 @@
-
 .dropdown {
     position: relative;
     display: inline-block;
 }
-
 li {
   display: inline-block;
 }
-
 .dropdown {
   position: relative;
   display: inline-block;
 }
-
 :root,[data-bs-theme=light] {
     --bs-blue: #0d6efd;
     --bs-indigo: #6610f2;
@@ -131,16 +127,14 @@ li {
     --bs-form-invalid-color: #dc3545;
     --bs-form-invalid-border-color: #dc3545
 }
-
 *,::after,::before {
     box-sizing: border-box
 }
-
 @media (prefers-reduced-motion:no-preference) {
     :root {
         scroll-behavior: smooth
     }
-
+}
 body {
     margin: 0;
     font-family: var(--bs-body-font-family);
@@ -153,7 +147,6 @@ body {
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent
 }
-
 .h1,.h2,.h3,.h4,.h5,.h6,h1,h2,h3,h4,h5,h6 {
     margin-top: 0;
     margin-bottom: .5rem;
@@ -161,30 +154,25 @@ body {
     line-height: 1.2;
     color: var(--bs-heading-color)
 }
-
 .h1,h1 {
     font-size: calc(1.375rem + 1.5vw)
 }
-
 @media (min-width: 1200px) {
     .h1,h1 {
         font-size:2.5rem
     }
-
+}
 p {
     margin-top: 0;
     margin-bottom: 1rem
 }
-
 a {
     color: rgba(var(--bs-link-color-rgb),var(--bs-link-opacity,1));
     text-decoration: underline
 }
-
 img,svg {
     vertical-align: middle
 }
-
 .container,.container-fluid,.container-lg,.container-md,.container-sm,.container-xl,.container-xxl {
     --bs-gutter-x: 1.5rem;
     --bs-gutter-y: 0;
@@ -194,27 +182,26 @@ img,svg {
     margin-right: auto;
     margin-left: auto
 }
-
 @media (min-width: 576px) {
     .container,.container-sm {
         max-width:540px
     }
-
+}
 @media (min-width: 768px) {
     .container,.container-md,.container-sm {
         max-width:720px
     }
-
+}
 @media (min-width: 992px) {
     .container,.container-lg,.container-md,.container-sm {
         max-width:960px
     }
-
+}
 @media (min-width: 1200px) {
     .container,.container-lg,.container-md,.container-sm,.container-xl {
         max-width:1140px
     }
-
+}
 :root {
     --bs-breakpoint-xs: 0;
     --bs-breakpoint-sm: 576px;
@@ -223,7 +210,6 @@ img,svg {
     --bs-breakpoint-xl: 1200px;
     --bs-breakpoint-xxl: 1400px
 }
-
 .row {
     --bs-gutter-x: 1.5rem;
     --bs-gutter-y: 0;
@@ -233,7 +219,6 @@ img,svg {
     margin-right: calc(-.5 * var(--bs-gutter-x));
     margin-left: calc(-.5 * var(--bs-gutter-x))
 }
-
 .row>* {
     flex-shrink: 0;
     width: 100%;
@@ -242,7 +227,6 @@ img,svg {
     padding-left: calc(var(--bs-gutter-x) * .5);
     margin-top: var(--bs-gutter-y)
 }
-
     .col-md-9 {
         flex: 0 0 auto;
         width: 75%
