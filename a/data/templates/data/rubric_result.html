@@ -1,14 +1,14 @@
 {% extends 'data/base.html' %}
 
-{% block description %}Компании категории «{{ rubric.name_original }}».{% endblock %}
+{% block description %}Каталог компаний категории «{{ rubric.name_original }}».{% endblock %}
 
-{% block keywords %}отзывы о компаниях {{ rubric.name_original }}, контакты компаний {{ rubric.name_original }}, услуги {{ rubric.name_original }}{% endblock %}
+{% block keywords %}компании {{ rubric.name_original }}{% endblock %}
 
-{% block title %}Компании категории — {{ rubric.name_original }}{% endblock %}
+{% block title %}Компании категории {{ rubric.name_original }}{% endblock %}
 
 {% block content %}
     <div class="container">
-        <h3>Компании в категории "{{ rubric.name_original }}"</h3>
+        <h3>Компании в категории «{{ rubric.name_original }}»</h3>
         <ul>
             {% for company in companies %}
                 <li><a href="{% url 'company_detail' slug=company.slug %}">{{ company.org_name1 }}</a></li>
