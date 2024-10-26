@@ -1,13 +1,14 @@
-from django.http import HttpResponseForbidden, HttpResponse
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import Company, Rubrics, Comment
+from django.shortcuts import redirect
 from django.db.models import Q, F, Count
 from django.contrib import messages
 import os
-import json
 import datetime
 import random
 import logging
+from django.http import HttpResponseForbidden, JsonResponse
+from django.shortcuts import get_object_or_404, render
+from .models import Company, Rubrics, Comment
+import json
 
 aj = {
     "Call-центры": [
@@ -8897,13 +8898,8 @@ aj = {
 
 
 def rubric_detail(request, slug):
-    # Получаем рубрику или выбрасываем 404 ошибку, если не найдено
     rubric_obj = get_object_or_404(Rubrics, slug=slug)
-
-    # Получаем компании, связанные с рубрикой и с видимостью True
     companies_with_rubric = Company.objects.filter(rubrics=rubric_obj, visible=True)
-
-    # Отправляем данные в шаблон
     return render(request, 'data/rubric_result.html', context={
         'rubric': rubric_obj,
         'companies': companies_with_rubric,
@@ -8986,11 +8982,6 @@ def test2(request):
 
     return render(request, 'data/test.html', {'find': find, 'count': count})
 
-from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponseForbidden
-from django.db.models import F
-from .models import Company, Comment, Rubrics
-
 def company_detail(request, slug):
     company = get_object_or_404(Company, slug=slug)
     rubrics = Rubrics.objects.all()
@@ -9001,18 +8992,41 @@ def company_detail(request, slug):
         content = request.POST.get('content')
         feedback_type = request.POST.get('feedback_type')
         fake_field = request.POST.get('fake_field', '')
+
         if fake_field:
             return HttpResponseForbidden('Вы не можете отправлять комментарии.')
+
         if name and content and feedback_type:
             is_positive = (feedback_type == 'positive')
             comment = Comment(company=company, name=name, content=content, is_positive=is_positive)
             comment.save()
-            comments = company.comments.all().order_by('-created_at')
-    print(company.mainnew)  # Проверьте, что объект компании получен
-    print(comments)  # Проверьте, что комментарии существуют
+            comments = company.comments.all().order_by('-created_at')  # обновить комментарии
 
-    return render(request, 'data/company_detail.html',
-                  context={'company': company, 'rubrics': rubrics, 'comments': comments})
+    # Подготавливаем JSON-данные для передачи в шаблон
+    company_data = {
+        "org_name1": company.org_name1,
+        "org_name2": company.org_name2,
+        "mainnew": company.mainnew,
+        "contact_groups": {
+            "contacts1_text1": company.contact_groups_contacts1_text1,
+            "contacts1_text2": company.contact_groups_contacts1_text2,
+            "contacts1_text3": company.contact_groups_contacts1_text3,
+            "contacts2_text1": company.contact_groups_contacts2_text1,
+            "contacts2_text2": company.contact_groups_contacts2_text2,
+            "contacts2_text3": company.contact_groups_contacts2_text3,
+        }
+    }
+
+    return render(
+        request,
+        'data/company_detail.html',
+        context={
+            'company': company,
+            'company_data': json.dumps(company_data),  # передаем данные как JSON строку
+            'rubrics': rubrics,
+            'comments': comments
+        }
+    )
 
 
 def toggle_visibility(request, pk):
