@@ -1,9 +1,8 @@
 {% extends 'data/base.html' %}
 {% load static %}
-
-{% block title %}{{ company.org_name1 }} — страница компании{% endblock %}
 {% block description %}{{ company.org_name2 }} «{{ company.org_name1 }}».{% endblock %}
-{% block keywords %}{{ company.org_name1 }}{% endblock %}
+{% block keywords %}{{ company.org_name1 }}, компания {{ company.org_name1 }}{% endblock %}
+{% block title %}{{ company.org_name1 }} — страница компании{% endblock %}
 
 {% block content %}
 
@@ -27,8 +26,6 @@
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const contentText = document.getElementById("mainnew-content").textContent;
-
-        // Заменяем <br> на переносы строк
         const formattedContent = contentText
             .replace(/\\u003B/g, ',')        // Заменяем \u003B на запятую
             .replace(/<br\s*\/?>/g, '\n')    // Заменяем <br> на \n
@@ -36,8 +33,6 @@
             .replace(/\\u003E/g, '>')        // Заменяем \u003E на >
             .replace(/\\u002D/g, '-')        // Заменяем \u002D на -
             .trim();                         // Убираем лишние пробелы
-
-        // Устанавливаем отформатированный текст
         document.getElementById("mainnew-block").innerHTML = formattedContent.replace(/\n/g, '<br>');
     });
 </script><br><br>

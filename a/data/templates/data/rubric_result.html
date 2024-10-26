@@ -1,14 +1,10 @@
 {% extends 'data/base.html' %}
 
-{% block title %}Отзывы о компаниях — {{ rubric.name_original }}{% endblock %}
+{% block description %}Компании категории '{{ rubric.name_original }}'.{% endblock %}
 
-{% block description %}
-    Узнайте о компаниях в категории {{ rubric.name_original }}: отзывы, контактная информация, услуги и многое другое.
-{% endblock %}
+{% block keywords %}отзывы о компаниях {{ rubric.name_original }}, контакты компаний {{ rubric.name_original }}, услуги {{ rubric.name_original }}{% endblock %}
 
-{% block keywords %}
-    отзывы о компаниях {{ rubric.name_original }}, контакты компаний {{ rubric.name_original }}, услуги {{ rubric.name_original }}
-{% endblock %}
+{% block title %}Компании категории — {{ rubric.name_original }}{% endblock %}
 
 {% block content %}
     <div class="container">
