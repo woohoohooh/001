@@ -8992,41 +8992,18 @@ def company_detail(request, slug):
         content = request.POST.get('content')
         feedback_type = request.POST.get('feedback_type')
         fake_field = request.POST.get('fake_field', '')
-
         if fake_field:
             return HttpResponseForbidden('Вы не можете отправлять комментарии.')
-
         if name and content and feedback_type:
             is_positive = (feedback_type == 'positive')
             comment = Comment(company=company, name=name, content=content, is_positive=is_positive)
             comment.save()
-            comments = company.comments.all().order_by('-created_at')  # обновить комментарии
+            comments = company.comments.all().order_by('-created_at')
+    print(company.mainnew)  # Проверьте, что объект компании получен
+    print(comments)  # Проверьте, что комментарии существуют
 
-    # Подготавливаем JSON-данные для передачи в шаблон
-    company_data = {
-        "org_name1": company.org_name1,
-        "org_name2": company.org_name2,
-        "mainnew": company.mainnew,
-        "contact_groups": {
-            "contacts1_text1": company.contact_groups_contacts1_text1,
-            "contacts1_text2": company.contact_groups_contacts1_text2,
-            "contacts1_text3": company.contact_groups_contacts1_text3,
-            "contacts2_text1": company.contact_groups_contacts2_text1,
-            "contacts2_text2": company.contact_groups_contacts2_text2,
-            "contacts2_text3": company.contact_groups_contacts2_text3,
-        }
-    }
-
-    return render(
-        request,
-        'data/company_detail.html',
-        context={
-            'company': company,
-            'company_data': json.dumps(company_data),  # передаем данные как JSON строку
-            'rubrics': rubrics,
-            'comments': comments
-        }
-    )
+    return render(request, 'data/company_detail.html',
+                  context={'company': company, 'rubrics': rubrics, 'comments': comments})
 
 
 def toggle_visibility(request, pk):
