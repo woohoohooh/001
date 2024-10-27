@@ -61,7 +61,7 @@ DATABASES = {
         'NAME': 'default_db',
         'USER': 'gen_user',
         'PASSWORD': r'3,\5CkAb^?q~S/',
-        'HOST': '192.168.0.6',
+        'HOST': '195.80.50.93',
         'PORT': '5432',
         'CONN_MAX_AGE': 600,
         'OPTIONS': {
