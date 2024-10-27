@@ -6,6 +6,8 @@ from .views import (
     add_comment, company_detail2_2, start, test, test2,
     start_add_prefixes, start_add_zero_rubric, toggle_visibility
 )
+from django.conf.urls import handler404
+from django.views.generic import TemplateView
 
 sitemaps = {
     'rubrics': RubricsSitemap,
