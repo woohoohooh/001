@@ -717,7 +717,7 @@ textarea.form-control {
 {% if company.ads_article %}<p>{{ company.ads_article }}</p>{% endif %}
 {% if company.article_warning %}<p>{{ company.article_warning }}</p>{% endif %}<br><br>
 
-<div style="font-weight: bold; font-size: 18px; margin: 10px 0;">Отзывы</div>
+<div style="font-weight: bold; font-size: 18px; margin: 10px 0;">Комментарии</div>
 
     {% for comment in comments %}
     <div class="p-4 p-md-5 border rounded-3 bg-body-tertiary">
@@ -731,7 +731,7 @@ textarea.form-control {
         {% endif %}
     </div><br>
     {% empty %}
-        <p>Еще нет отзывов</p>
+        <p>Еще нет комментариев</p>
     {% endfor %}<br><br>
 
     <div style="font-weight: bold; font-size: 24px; margin: 10px 0;">Вы рекомендуете компанию <span style="color: red;">«{{ company.org_name1 }}»</span>?
@@ -746,7 +746,7 @@ textarea.form-control {
         <input type="text" class="form-control" id="na" name="na">
     </div>
     <div class="form-group">
-        <label for="re">Отзыв</label>
+        <label for="re">Комментарий</label>
         <textarea class="form-control" id="re" name="re" required></textarea>
     </div>
 
@@ -755,7 +755,7 @@ textarea.form-control {
         <label class="form-check-label" for="positive">Рекомендую</label>
     </div>
     <div class="form-check">
-        <input type="radio" class="form-check-input" id="negative" name="feedback_type" value="negative" required checked>
+        <input type="radio" class="form-check-input" id="negative" name="feedback_type" value="negative" required>
         <label class="form-check-label" for="negative">Не рекомендую</label>
     </div>
 

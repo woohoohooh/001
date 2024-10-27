@@ -60,8 +60,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'default_db',
         'USER': 'gen_user',
-        'PASSWORD': r'R\4^=7n?q,Y\r<',
-        'HOST': '176.124.213.20',
+        'PASSWORD': r'3,\5CkAb^?q~S/',
+        'HOST': '192.168.0.6',
         'PORT': '5432',
         'CONN_MAX_AGE': 600,
         'OPTIONS': {
