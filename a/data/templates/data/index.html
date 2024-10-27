@@ -1,5 +1,8 @@
 {% extends 'data/base.html' %}
-
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+{% endblock %}
 {% block description %}Полный каталог компаний для быстрого поиска нужной организации.{% endblock %}
 {% block keywords %}engil, engil.ru, каталог компаний, отзывы о компаниях{% endblock %}
 {% block title %}Engil.ru – каталог компаний и организаций{% endblock %}
