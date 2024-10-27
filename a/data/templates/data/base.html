@@ -3,14 +3,15 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="{% static 'css/base.css' %}">
-    {% block extra_css %}{% endblock %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="{% block description %}Каталог компаний Engil.ru: отзывы, контактная информация, услуги.{% endblock %}">
     <meta name="keywords" content="{% block keywords %}engil, engil.ru, каталог компаний, отзывы о компаниях{% endblock %}">
     <title>{% block title %}Каталог компаний{% endblock %}</title>
 
     <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+
+    <style>
+    </style>
 </head>
 <body>
 <div class="container">
@@ -18,33 +19,18 @@
         <div><br>
             <a href="{% url 'index' %}"><img src="{% static 'img/logo.png' %}" alt="Logo" width="111"></a>
             <nav><br>
-                    <big>
-                        <div class="dropdown">
-                        </div>
-                    </big>
+                <big>
+                    <div class="dropdown">
+                    </div>
+                </big>
             </nav>
         </div>
     </div>
 </div>
-    <div class="content">
-        {% block content %}{% endblock %}
-    </div>
+<div class="content">
+    {% block content %}{% endblock %}
+</div>
 
-<style>
-    #centeredElement {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: #3498db;
-        color: white;
-        padding: 20px;
-        cursor: pointer;
-        border-radius: 50%;
-        transition: all 0.3s ease;
-        user-select: none; /* Запрещаем выделение текста */
-    }
-</style>
 <div id="centeredElement">Кликни меня!</div>
 <script>
     var centeredElement = document.getElementById('centeredElement');
