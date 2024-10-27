@@ -3,6 +3,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    {% block extra_css %}{% endblock %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="{% block description %}Каталог компаний Engil.ru: отзывы, контактная информация, услуги.{% endblock %}">
     <meta name="keywords" content="{% block keywords %}engil, engil.ru, каталог компаний, отзывы о компаниях{% endblock %}">
@@ -11,12 +12,6 @@
     <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
 
     <style>
-        /* Встроенные стили */
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-        }
-
         #centeredElement {
             position: absolute;
             top: 50%;
@@ -30,28 +25,13 @@
             transition: all 0.3s ease;
             user-select: none; /* Запрещаем выделение текста */
         }
-
-        .container {
-            padding: 20px;
-        }
-
-        .row {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .content {
-            padding: 20px;
-        }
-
-        /* Добавьте любые другие необходимые стили здесь */
     </style>
 </head>
 <body>
 <div class="container">
     <div class="row">
         <div><br>
-            <a href="{% url 'index' %}"><img src="{% static 'img/logo.png' %}" alt="Logo" width="111"></a>
+            <a href="{% url 'index' %}"><img src="{% static 'img/logo.png' %}" alt="Logo" width="296" height="94"></a>
             <nav><br>
                 <big>
                     <div class="dropdown">
@@ -64,18 +44,6 @@
 <div class="content">
     {% block content %}{% endblock %}
 </div>
-
-<div id="centeredElement">Кликни меня!</div>
-<script>
-    var centeredElement = document.getElementById('centeredElement');
-    centeredElement.addEventListener('click', function() {
-        var newSize = Math.floor(Math.random() * 200) + 100;
-        var newColor = '#' + Math.floor(Math.random()*16777215).toString(16);
-        centeredElement.style.width = newSize + 'px';
-        centeredElement.style.height = newSize + 'px';
-        centeredElement.style.backgroundColor = newColor;
-    });
-</script>
 
 </body>
 </html>
