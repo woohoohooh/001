@@ -3,6 +3,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    {% block extra_css %}{% endblock %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="{% block description %}Каталог компаний Engil.ru: отзывы, контактная информация, услуги.{% endblock %}">
     <meta name="keywords" content="{% block keywords %}engil, engil.ru, каталог компаний, отзывы о компаниях{% endblock %}">
@@ -11,29 +12,6 @@
     <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
 
     <style>
-        /* Основные стили */
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa; /* Добавьте фон */
-        }
-
-        .container {
-            padding: 20px;
-            max-width: 1200px; /* Ограничиваем ширину */
-            margin: auto; /* Центрируем контейнер */
-        }
-
-        .row {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap; /* Позволяем обертывание на маленьких экранах */
-        }
-
-        .content {
-            padding: 20px;
-        }
-
         #centeredElement {
             position: absolute;
             top: 50%;
@@ -47,37 +25,6 @@
             transition: all 0.3s ease;
             user-select: none; /* Запрещаем выделение текста */
         }
-
-        /* Стили для заголовков и текста */
-        h1, h3, h5 {
-            color: #333; /* Цвет заголовков */
-        }
-
-        p {
-            line-height: 1.6; /* Интервал между строками */
-            color: #555; /* Цвет текста */
-        }
-
-        .btn {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            background-color: #007bff; /* Цвет кнопки */
-            color: white; /* Цвет текста на кнопке */
-            text-decoration: none;
-        }
-
-        /* Стили для отзывов */
-        .p-4 {
-            padding: 1.5rem; /* Пример отступа */
-        }
-
-        .border {
-            border: 1px solid #dee2e6; /* Цвет границы */
-        }
-
-        /* Добавьте любые другие необходимые стили здесь */
     </style>
 </head>
 <body>
