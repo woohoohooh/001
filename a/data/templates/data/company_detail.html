@@ -332,11 +332,6 @@ textarea {
         width: 50%
     }
 
-    .col-md-7 {
-        flex: 0 0 auto;
-        width: 58.33333333%
-    }
-
     .col-md-8 {
         flex: 0 0 auto;
         width: 66.66666667%
@@ -629,11 +624,11 @@ textarea.form-control {
 
     <h1 class="p-4 mb-3 bg-body-tertiary rounded">{{ company.org_name1 }}</h1> <span class="btn btn-light btn-sm mb-1">4472 просмотров</span><br>
     <div class="row">
-        <div class="col-md-7">
             <div class="main-content">
 
 <br><br>
-<h5><b>Офисы</b></h5>
+<div style="font-weight: bold; font-size: 18px; margin: 10px 0;">Офисы</div>
+
 <script id="mainnew-content" type="application/json">
     {{ company.mainnew|default:""|safe|escapejs }}
 </script>
@@ -641,21 +636,34 @@ textarea.form-control {
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+        // Парсинг JSON для извлечения данных
         const contentText = document.getElementById("mainnew-content").textContent;
-        const formattedContent = contentText
-            .replace(/\\u003B/g, ',')        // Заменяем \u003B на запятую
-            .replace(/<br\s*\/?>/g, '\n')    // Заменяем <br> на \n
-            .replace(/\\u003C/g, '<')        // Заменяем \u003C на <
-            .replace(/\\u003E/g, '>')        // Заменяем \u003E на >
-            .replace(/\\u002D/g, '-')        // Заменяем \u002D на -
-            .trim();                         // Убираем лишние пробелы
+        let parsedContent;
+
+        try {
+            parsedContent = JSON.parse(contentText);
+        } catch (error) {
+            console.error("Ошибка при парсинге JSON:", error);
+            parsedContent = contentText;
+        }
+
+        // Обработка текста с заменой кодированных символов
+        const formattedContent = parsedContent
+            .replace(/\\u0022/g, '"')       // Заменяем \u0022 на "
+            .replace(/\\u003B/g, ',')       // Заменяем \u003B на ,
+            .replace(/<br\s*\/?>/g, '\n')   // Заменяем <br> на \n
+            .replace(/\\u003C/g, '<')       // Заменяем \u003C на <
+            .replace(/\\u003E/g, '>')       // Заменяем \u003E на >
+            .replace(/\\u002D/g, '-')       // Заменяем \u002D на -
+            .trim();                        // Убираем лишние пробелы
+
+        // Вывод данных в HTML с корректной обработкой переводов строк
         document.getElementById("mainnew-block").innerHTML = formattedContent.replace(/\n/g, '<br>');
     });
 </script><br><br>
 
-<h5><b>Услуги</b></h5>
+<div style="font-weight: bold; font-size: 18px; margin: 10px 0;">Услуги</div>
     <div class="row">
-        <div class="col-md-7">
             {% if company.rubrics %}
                 <div class="tags">
                     {% for tag in company.rubrics.all %}
@@ -663,7 +671,6 @@ textarea.form-control {
                     {% endfor %}
                 </div><br><br>
             {% endif %}
-        </div>
     </div>
 
 <script id="company-contacts" type="application/json">
@@ -675,32 +682,32 @@ textarea.form-control {
         "contacts2_text2": "{{ company.contact_groups_contacts2_text2 }}",
         "contacts2_text3": "{{ company.contact_groups_contacts2_text3 }}"
     }
-</script>
+</script><br><br>
 <div id="contacts"></div>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const contactData = JSON.parse(document.getElementById("company-contacts").textContent);
-        let contactsHTML = '<h5><b>Контакты</b></h5>';
+        let contactsHTML = '<div style="font-weight: bold; font-size: 18px; margin: 10px 0;">Контакты</div>';
 
         const isValidContact = (contact) => contact && !contact.includes('2gis');
 
         if (isValidContact(contactData.contacts1_text1)) {
-            contactsHTML += `<a target="_blank" rel="nofollow">${contactData.contacts1_text1}</a><br>`;
+            contactsHTML += `${contactData.contacts1_text1}<br>`;
         }
         if (isValidContact(contactData.contacts1_text2)) {
-            contactsHTML += `<a target="_blank" rel="nofollow">${contactData.contacts1_text2}</a><br>`;
+            contactsHTML += `${contactData.contacts1_text2}<br>`;
         }
         if (isValidContact(contactData.contacts1_text3)) {
-            contactsHTML += `<a target="_blank" rel="nofollow">${contactData.contacts1_text3}</a><br>`;
+            contactsHTML += `${contactData.contacts1_text3}<br>`;
         }
         if (isValidContact(contactData.contacts2_text1)) {
-            contactsHTML += `<a target="_blank" rel="nofollow">${contactData.contacts2_text1}</a><br>`;
+            contactsHTML += `${contactData.contacts2_text1}<br>`;
         }
         if (isValidContact(contactData.contacts2_text2)) {
-            contactsHTML += `<a target="_blank" rel="nofollow"}">${contactData.contacts2_text2}</a><br>`;
+            contactsHTML += `${contactData.contacts2_text2}<br>`;
         }
         if (isValidContact(contactData.contacts2_text3)) {
-            contactsHTML += `<a target="_blank" rel="nofollow"}">${contactData.contacts2_text3}</a>`;
+            contactsHTML += `${contactData.contacts2_text3}`;
         }
 
         document.getElementById("contacts").innerHTML = contactsHTML;
@@ -710,7 +717,7 @@ textarea.form-control {
 {% if company.ads_article %}<p>{{ company.ads_article }}</p>{% endif %}
 {% if company.article_warning %}<p>{{ company.article_warning }}</p>{% endif %}<br><br>
 
-    <h3>Отзывы</h3><br>
+<div style="font-weight: bold; font-size: 18px; margin: 10px 0;">Отзывы</div>
 
     {% for comment in comments %}
     <div class="p-4 p-md-5 border rounded-3 bg-body-tertiary">
@@ -727,7 +734,9 @@ textarea.form-control {
         <p>Еще нет отзывов</p>
     {% endfor %}<br><br>
 
-    <h3>Оставить отзыв</h3><br>
+    <div style="font-weight: bold; font-size: 24px; margin: 10px 0;">Вы рекомендуете компанию <span style="color: red;">«{{ company.org_name1 }}»</span>?
+    </div>
+
     <form method="post" action="{% url 'add_comment' company.id %}">
     {% csrf_token %}
     <input type="hidden" name="company_id" value="{{ company.id }}">
@@ -760,7 +769,6 @@ textarea.form-control {
 </form>
 <br><br><br><br>
 </div>
-            </div>
         </div>
     </div>
 </div>
