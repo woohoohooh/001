@@ -9237,6 +9237,3 @@ def start(request):
 
 def forstart(request):
     return render(request, 'data/forstart.html')
-
-def custom_404_view(request, exception):
-    return render(request, 'data/404.html', {}, status=404)

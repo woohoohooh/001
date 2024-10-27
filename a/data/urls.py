@@ -6,8 +6,6 @@ from .views import (
     add_comment, company_detail2_2, start, test, test2,
     start_add_prefixes, start_add_zero_rubric, toggle_visibility
 )
-from django.conf.urls import handler404
-from django.views.generic import TemplateView
 
 sitemaps = {
     'rubrics': RubricsSitemap,
@@ -30,5 +28,3 @@ urlpatterns = [
     path('company/delete/<int:pk>/', delete_company, name='delete_company'),  # Удаление компании
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='sitemap'),  # Sitemap
 ]
-
-handler404 = 'data.views.custom_404_view'
