@@ -1,24 +1,74 @@
 
 {% load static %}
 {% block content %}
-нужно написать отзыв<br>
-ОСНОВНЫЕ ТРЕБОВАНИЯ<br>
-A. о компании {{ company.org_name1 }}<br>
-B. которая занимается:<br>
----<br>
-{% if company.rubrics %}
+<div id="copy-text">
+    A. название компании: {{ company.org_name1 }}<br>
+    B. категории деятельности: {% if company.rubrics.exists %}
         {% for tag in company.rubrics.all %}
-                {{ tag }},
-        {% endfor %}<br>
+            {{ tag }},
+        {% endfor %}
+    {% else %}
+        <p>Информация о рубриках отсутствует.</p>
+    {% endif %}<br>
+    C. город: <script id="mainnew-content" type="application/json">{{ company.mainnew|default:""|safe|escapejs }}</script>
+<div id="mainnew-block"></div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Парсинг JSON для извлечения данных
+        const contentText = document.getElementById("mainnew-content").textContent;
+        let parsedContent;
+
+        try {
+            parsedContent = JSON.parse(contentText);
+        } catch (error) {
+            console.error("Ошибка при парсинге JSON:", error);
+            parsedContent = contentText;
+        }
+
+        // Обработка текста с заменой кодированных символов
+        const formattedContent = parsedContent
+            .replace(/\\u0022/g, '"')       // Заменяем \u0022 на "
+            .replace(/\\u003B/g, ',')       // Заменяем \u003B на ,
+            .replace(/<br\s*\/?>/g, '\n')   // Заменяем <br> на \n
+            .replace(/\\u003C/g, '<')       // Заменяем \u003C на <
+            .replace(/\\u003E/g, '>')       // Заменяем \u003E на >
+            .replace(/\\u002D/g, '-')       // Заменяем \u002D на -
+            .trim();                        // Убираем лишние пробелы
+
+        // Вывод данных в HTML с корректной обработкой переводов строк
+        document.getElementById("mainnew-block").innerHTML = formattedContent.replace(/\n/g, '<br>');
+    });
+</script>
+    D. от 300 до 500 символов каждый отзыв<br>
+    E. 10 отзывов
+</div>
+
+<!-- Кнопка копирования отображается только при наличии рубрик -->
+{% if company.rubrics.exists %}
+    <button onclick="copyText()">Скопировать</button>
 {% endif %}
----<br>
-ДОПОЛНИТЕЛЬНЫЕ ПОЖЕЛАНИЯ<br>
-1. слегка отрицательный отзыв<br>
-2. от имени бывшего клиента<br>
-3. в тексте отзыва напиши название компании только 1 раз<br>
-4. текст отзыва более 1000 символов, можно до 2000<br>
-5. пиши только сам текст отзыва без лишнего<br>
-6. пиши простым языком, чтобы на вид было как человек написал на быструю руку, но без ошибок<br>
+
+<script>
+    function copyText() {
+        // Выбираем текст для копирования
+        const copyText = document.getElementById("copy-text").innerText;
+
+        // Создаем временный элемент для текстового содержимого
+        const tempInput = document.createElement("textarea");
+        tempInput.value = copyText;
+        document.body.appendChild(tempInput);
+
+        // Выделяем и копируем содержимое
+        tempInput.select();
+        document.execCommand("copy");
+
+        // Удаляем временный элемент
+        document.body.removeChild(tempInput);
+    }
+</script>
+
+
 
     <h3>Оставить отзыв</h3><br>
     <form method="post" action="{% url 'add_comment' company.id %}">
