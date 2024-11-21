@@ -6,8 +6,6 @@ __pycache__/
 
 # Базы данных SQLite
 *.sqlite3
-db.sqlite3
-a/db.sqlite3
 
 # Файлы, связанные с виртуальными окружениями
 .venv/
