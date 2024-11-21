@@ -7,8 +7,10 @@ import random
 import logging
 from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import get_object_or_404, render
-from .models import Company, Rubrics, Comment
+from .models import Company, Rubrics, Comment, FileTracker
 import json
+from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 
 aj = {
     "Call-центры": [
@@ -9120,120 +9122,116 @@ def start_add_zero_rubric(request):
     return redirect('index')
 
 
-# Настройка логгера
-logging.basicConfig(filename='process.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-
-
+@csrf_exempt
 def start(request):
+    if request.method != 'POST':
+        return HttpResponse("Неподдерживаемый метод.", status=405)
+
     tmp_orgs = []
     current_directory = os.path.dirname(os.path.abspath(__file__))
     bd_directory = os.path.join(current_directory, '../../bd_start')
 
-    for filename in os.listdir(bd_directory):
-        if filename.endswith(".json"):
-            file_path = os.path.join(bd_directory, filename)
-            org_name1 = 'empty'.lower()
+    # Получаем последний обработанный файл из базы данных
+    last_file_tracker = FileTracker.objects.order_by('-id').first()
+    last_filename = last_file_tracker.filename if last_file_tracker else None
+
+    # Сортировка файлов и начало обработки с последнего обработанного
+    files = sorted(os.listdir(bd_directory))
+    start_processing = False
+    for filename in files:
+        if not filename.endswith(".json"):
+            continue
+
+        # Пропустить файлы до последнего обработанного
+        if last_filename and not start_processing:
+            if filename == last_filename:
+                start_processing = True
+            else:
+                continue
+        else:
+            start_processing = True
+
+        file_path = os.path.join(bd_directory, filename)
+        try:
+            with open(file_path, 'r', encoding='utf-8-sig') as f:
+                org_list = json.load(f)
+
+                for count, org_data in enumerate(org_list):
+                    try:
+                        # Обработка рубрик
+                        tmp_rubrics = org_data.get('rubrics', [])
+                        rubrics_list = []
+                        for rubric_data in tmp_rubrics:
+                            rubric_name = rubric_data.get('name', '').replace(" /", ", ").replace("/", "").replace("  ", " ").strip()
+                            if rubric_name in aj:
+                                rubric_name2 = aj[rubric_name][0].strip()
+                                rubric_instance, _ = Rubrics.objects.get_or_create(name_original=rubric_name2)
+                                rubrics_list.append(rubric_instance)
+
+                        city_name = org_data.get('adm_div', [{}] * 4)[3].get('name', '')
+                        org_name = org_data.get('org', {}).get('name', '')
+                        org_name1, org_name2 = (org_name.split(', ') + [''])[:2]
+                        address_name = org_data.get('address_name', '')
+                        address_comment = org_data.get('address_comment', '')
+
+                        contact_groups = org_data.get('contact_groups', [])
+                        contacts = []
+                        for group in contact_groups[:2]:
+                            contacts += [contact.get('value', '') for contact in group.get('contacts', [])[:3]]
+
+                        contact_groups_contacts = [
+                            contact.split('?')[0] if '?http' in contact or '?text' in contact else contact
+                            for contact in contacts
+                        ]
+
+                        ads_article = org_data.get('ads', {}).get('article', '').replace('<br />', ' ')
+                        article_warning = org_data.get('ads', {}).get('article_warning', '')
+
+                        if org_name1.lower() not in tmp_orgs:
+                            tmp_orgs.append(org_name1.lower())
+
+                        new_address = f'— {city_name}, {address_name}, {address_comment}<br>'.strip()
+
+                        existing_company = Company.objects.filter(org_name1__iexact=org_name1.lower()).first()
+
+                        if existing_company:
+                            if new_address not in existing_company.mainnew:
+                                existing_company.mainnew += f' {new_address}'
+                                existing_company.save()
+                        else:
+                            company_instance = Company.objects.create(
+                                org_name1=org_name1,
+                                org_name2=org_name2,
+                                mainnew=new_address,
+                                contact_groups_contacts1_text1=contact_groups_contacts[0],
+                                contact_groups_contacts1_text2=contact_groups_contacts[1],
+                                contact_groups_contacts1_text3=contact_groups_contacts[2],
+                                contact_groups_contacts2_text1=contact_groups_contacts[3] if len(contact_groups_contacts) > 3 else '',
+                                contact_groups_contacts2_text2=contact_groups_contacts[4] if len(contact_groups_contacts) > 4 else '',
+                                contact_groups_contacts2_text3=contact_groups_contacts[5] if len(contact_groups_contacts) > 5 else '',
+                                ads_article=ads_article,
+                                article_warning=article_warning,
+                                visible=False,
+                                pro=False,
+                            )
+                            company_instance.rubrics.set(rubrics_list)
+
+                    except Exception:
+                        pass  # Ошибки обработки компании игнорируются
+
+            # Сохраняем имя последнего обработанного файла в FileTracker
             try:
-                with open(file_path, 'r', encoding='utf-8-sig') as f:
-                    ok = json.load(f)
+                FileTracker.objects.create(filename=filename)
+            except Exception:
+                pass  # Ошибки добавления в FileTracker игнорируются
 
-                    if request.method == 'POST':
-                        q = len(ok)
-                        for count in range(q):
-                            try:
-                                tmp_rubrics = ok[count].get('rubrics', [])
-                                rubrics_list = []
+        except json.JSONDecodeError:
+            pass  # Ошибка чтения JSON игнорируется
+        except Exception:
+            pass  # Другие ошибки игнорируются
 
-                                for rubric_data in tmp_rubrics:
-                                    rubric_name = rubric_data.get('name', '').replace(" /", ", ").replace("/",
-                                                                                                          "").replace(
-                                        "  ", " ").strip()
-                                    if rubric_name in aj:
-                                        rubric_name2 = aj[rubric_name][0].strip()
-                                        rubric_instance, created = Rubrics.objects.get_or_create(
-                                            name_original=rubric_name2)
-                                        rubrics_list.append(rubric_instance)
-                            except Exception:
-                                rubrics_list = []
+    return HttpResponse("Обработка завершена.", status=200)
 
-                            city_name = ok[count].get('adm_div', [{}] * 4)[3].get('name', '')
-                            org_name = ok[count].get('org', {}).get('name', '')
-                            org_name1, org_name2 = (org_name.split(', ') + [''])[:2]
-                            address_name = ok[count].get('address_name', '')
-                            address_comment = ok[count].get('address_comment', '')
-
-                            contact_groups = ok[count].get('contact_groups', [])
-                            contacts = []
-                            for group in contact_groups[:2]:  # Limiting to first two contact groups
-                                contacts += [contact.get('value', '') for contact in group.get('contacts', [])[:3]]
-                            # Extract and clean contact values
-                            contact_groups_contacts = [
-                                contact.split('?')[0] if '?http' in contact or '?text' in contact else contact
-                                for contact in contacts
-                            ]
-                            ads_article = ok[count].get('ads', {}).get('article', '').replace('<br />', ' ')
-                            article_warning = ok[count].get('ads', {}).get('article_warning', '')
-
-                            if org_name1.lower() not in tmp_orgs:
-                                tmp_orgs.append(org_name1.lower())
-
-                            mainnew = f'— {city_name}, {address_name}, {address_comment}<br>'.strip()
-                            yes = False
-
-                            for rubric_data2 in rubrics_list:
-                                try:
-                                    rubric_data2 = rubric_data2.name_original.strip()
-                                    company_queryset = Company.objects.filter(org_name1=org_name1.lower(),
-                                                                              rubrics__name_original=rubric_data2)
-                                    if company_queryset.exists():
-                                        yes = True
-                                        break
-                                except Exception as e:
-                                    with open('1-bag_z_log.txt', 'a', encoding='utf8') as log_file:
-                                        log_file.write(str(e) + '\n')
-
-                            if yes:
-                                company_instance = company_queryset.first()
-                                mainnewlist = company_instance.mainnew if company_instance else ''.strip()
-                                if mainnew not in mainnewlist:
-                                    mainnew2 = f'{mainnewlist} {mainnew}'
-                                    company_queryset.update(mainnew=mainnew2)
-                            else:
-                                try:
-                                    company_instance = Company.objects.create(
-                                        org_name1=org_name1,
-                                        org_name2=org_name2,
-                                        mainnew=mainnew,
-                                        contact_groups_contacts1_text1=contact_groups_contacts[0],
-                                        contact_groups_contacts1_text2=contact_groups_contacts[1],
-                                        contact_groups_contacts1_text3=contact_groups_contacts[2],
-                                        contact_groups_contacts2_text1=contact_groups_contacts[3] if len(
-                                            contact_groups_contacts) > 3 else '',
-                                        contact_groups_contacts2_text2=contact_groups_contacts[4] if len(
-                                            contact_groups_contacts) > 4 else '',
-                                        contact_groups_contacts2_text3=contact_groups_contacts[5] if len(
-                                            contact_groups_contacts) > 5 else '',
-                                        ads_article=ads_article,
-                                        article_warning=article_warning,
-                                        visible=False,
-                                        pro=False,
-                                    )
-                                    company_instance.rubrics.set(rubrics_list)
-                                except Exception as d:
-                                    if 'duplicate' not in str(d):
-                                        with open('1-bag_d_log.txt', 'a', encoding='utf8') as log_file:
-                                            log_file.write(str(d) + '\n')
-
-                            # Mark file as processed
-                            with open(f'DONE_{filename}.txt', 'w', encoding='utf8') as done_file:
-                                done_file.write(
-                                    f'DONE\nProcessed on: {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
-                        print('DONE')
-            except Exception as e:
-                with open('1_bags_e_log.txt', 'a', encoding='utf8') as log_file:
-                    log_file.write(f'{str(e)}\n{org_name1}\n{filename}\n\n')
-
-    return redirect('forstart')
 
 def forstart(request):
     return render(request, 'data/forstart.html')

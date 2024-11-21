@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
+import re
 
 def custom_slugify(value):
     value = re.sub(r'[^\w\s\-]', '', value)
@@ -62,3 +63,6 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"{self.company}"
+
+class FileTracker(models.Model):
+    filename = models.CharField(max_length=255)
