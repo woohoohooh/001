@@ -682,7 +682,7 @@ textarea.form-control {
         "contacts2_text2": "{{ company.contact_groups_contacts2_text2 }}",
         "contacts2_text3": "{{ company.contact_groups_contacts2_text3 }}"
     }
-</script><br><br>
+</script><br>
 <div id="contacts"></div>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -712,10 +712,7 @@ textarea.form-control {
 
         document.getElementById("contacts").innerHTML = contactsHTML;
     });
-</script>
-
-{% if company.ads_article %}<p>{{ company.ads_article }}</p>{% endif %}
-{% if company.article_warning %}<p>{{ company.article_warning }}</p>{% endif %}<br><br>
+</script><br><br>
 
 <div style="font-weight: bold; font-size: 18px; margin: 10px 0;">Комментарии</div>
 

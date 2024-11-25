@@ -1,13 +1,11 @@
 import os
-import boto3
 from pathlib import Path
 
-# Основная директория проекта
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-#6xidc@0k*^+2k3t@qyw%19+c=+st46pj5pjwb$d^q!^jqiw-e'
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['engil.ru', 'localhost', '127.0.0.1']
 
@@ -23,7 +21,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'data.apps.DataConfig',
-    'storages',
     'django.contrib.sitemaps',
 ]
 
@@ -57,7 +54,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'a.wsgi.application'
 
-# Подключение к базе данных SQLite
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -65,20 +61,21 @@ DATABASES = {
     }
 }
 
-# Загрузка базы данных из S3 перед запуском
-AWS_ACCESS_KEY_ID = 'W9IPVPSXMBZ12O416SA7'
-AWS_SECRET_ACCESS_KEY = 'oKKCaatpAzsLlBUFvOnbAH021mCJfa5WTxB5v64d'
-AWS_STORAGE_BUCKET_NAME = '23b150f1-bc6e7174-c901-4463-91a6-db6756f1714d'
-AWS_S3_REGION_NAME = 'ru-1'
-AWS_S3_ENDPOINT_URL = 'https://s3.timeweb.cloud'
-AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.timeweb.cloud'
+AUTH_PASSWORD_VALIDATORS = [
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
+]
 
-# Настройка S3 для хранения статических и медиа файлов
-STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+LANGUAGE_CODE = 'ru'
+TIME_ZONE = 'UTC'
+USE_I18N = True
+USE_TZ = True
 
-STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
-MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
+# Настройка для локального хранилища статических и медиафайлов
+STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
@@ -88,42 +85,3 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
-# Функция для скачивания SQLite файла с S3
-def download_sqlite_from_s3():
-    s3 = boto3.client(
-        's3',
-        aws_access_key_id=AWS_ACCESS_KEY_ID,
-        aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-    )
-    local_path = os.path.join(BASE_DIR, 'db.sqlite3')
-
-    # Проверим, существует ли файл на S3 перед загрузкой
-    try:
-        s3.download_file(AWS_STORAGE_BUCKET_NAME, 'db.sqlite3', local_path)
-        print(f"SQLite DB downloaded to {local_path}")
-    except Exception as e:
-        print(f"Error downloading SQLite DB: {e}")
-
-
-# Функция для загрузки SQLite файла на S3
-def upload_sqlite_to_s3():
-    s3 = boto3.client(
-        's3',
-        aws_access_key_id=AWS_ACCESS_KEY_ID,
-        aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-    )
-    local_path = os.path.join(BASE_DIR, 'db.sqlite3')
-
-    try:
-        s3.upload_file(local_path, AWS_STORAGE_BUCKET_NAME, 'db.sqlite3')
-        print(f"SQLite DB uploaded to S3")
-    except Exception as e:
-        print(f"Error uploading SQLite DB: {e}")
-
-
-# Вызываем функции для загрузки базы данных с S3
-download_sqlite_from_s3()
-
-# Можно добавить upload_sqlite_to_s3() для выгрузки данных в S3 после завершения работы приложения или при завершении процесса

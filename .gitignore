@@ -4,9 +4,6 @@
 *.pyd
 __pycache__/
 
-# Базы данных SQLite
-*.sqlite3
-
 # Файлы, связанные с виртуальными окружениями
 .venv/
 env/
@@ -26,8 +23,6 @@ vcs.xml
 workspace.xml
 
 # Каталоги с файлами, которые не нужно коммитить
-media/
-staticfiles/
 build/
 dist/
 
@@ -39,6 +34,5 @@ dist/
 
 # Другие файлы и каталоги, которые обычно не коммитятся
 *.egg-info/
-*.sql
 .DS_Store
 Thumbs.db
